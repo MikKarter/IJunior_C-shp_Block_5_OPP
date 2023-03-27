@@ -1,133 +1,196 @@
-using _6.Task_4;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
-namespace _6.Task_4
+namespace _6.Task_5
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            bool isWorking = true;
-            Player player = new Player();
-            Deck deck = new Deck();
+            Storage storage = new Storage();
 
-            while (isWorking)
+            bool isWork = true;
+
+            while (isWork)
             {
-                Console.WriteLine("Press ENTER to give next card form desk");
-                Console.WriteLine("Press ESC to finish progtramm");
-                ConsoleKeyInfo key = Console.ReadKey();
+                int key;
+                Console.WriteLine("1. - add book");
+                Console.WriteLine("2. - show all book in storage");
+                Console.WriteLine("3. - remove book");
+                Console.WriteLine("4. - show book by parametr");
+                Console.WriteLine("5. - EXIT");
 
-                if (deck.IsEmpty() || key.Key == ConsoleKey.Escape )
+                key = Convert.ToInt32(Console.ReadLine());
+
+                switch (key)
                 {
-                    Console.WriteLine("\nWe are finished.");
-                    isWorking = false;
+                    case 1:
+                        {
+                            storage.AddBook();
+                            break;
+                        }
+                    case 2:
+                        {
+                            storage.ShowAllBooks();
+                            break;
+                        }
+                    case 3:
+                        {
+                            storage.RemoveBook();
+                            break;
+                        }
+                    case 4:
+                        {
+                            storage.ShowBooksByParametr();
+                            break;
+                        }
+                    case 5:
+                        {
+                            isWork=false;
+                            break;
+                        }
+                    default:
+                        {
+                            Console.WriteLine("Input correct number!");
+                            break;
+                        }
                 }
-                else
-                {
-                    Console.WriteLine("Push card from deck");
-                    Card playingCard = deck.GiveCard();
-                    player.TakeCard(playingCard);
-                }
-            }
-
-            Console.WriteLine("Card in you hands");
-            player.ShowDeck();
-        }
-    }
-
-    class Card
-    {
-        public string Suit { get; private set; }
-        public string Value { get; private set; }
-
-        public Card(string suit, string points)
-        {
-            Suit = suit;
-            Value = points;
-        }
-    }
-
-    class Deck
-    {
-        private Stack<Card> _card = new Stack<Card>();
-
-        public Deck()
-        {
-            Create();
-        }
-
-        public bool IsEmpty()
-        {
-            return _card.Count == 0;
-        }
-
-        public Card GiveCard()
-        {
-            return _card.Pop();
-        }
-
-        private void Create()
-        {
-            string[] suits = { "Clubs", "Diamonds", "Hearts", "Spades" };
-            string[] ranks = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace" };
-
-            List<Card> allCards = new List<Card>();
-
-            for (int i = 0; i < suits.Length; i++)
-            {
-                for (int j = 0; j < ranks.Length; j++)
-                {
-                    allCards.Add(new Card(suits[i], ranks[j]));
-                }
-            }
-
-            Console.WriteLine("Shuffle deck");
-            Shuffle(allCards);
-            AddCard(allCards);
-        }
-
-        private void AddCard(List<Card> allCards)
-        {
-            foreach (var card in allCards)
-            {
-                _card.Push(card);
-            }
-        }
-
-        private void Shuffle(List<Card> allCards)
-        {
-            Random random = new Random();
-            int count = allCards.Count;
-
-            for (int i = 0; i < count; i++)
-            {
-                Card tempCard = allCards[i];
-                allCards.RemoveAt(i);
-                allCards.Insert(random.Next(0, count), tempCard);
             }
         }
     }
 
-    class Player
+    class Book
     {
-        private List<Card> _card = new List<Card>();
+        public string Title { get; private set; }
+        public string Author { get; private set; }
+        public int ReleaseYear { get; private set; }
 
-        public void TakeCard(Card card)
+        public Book(string title, string author, int releaseYear)
         {
-            _card.Add(card);
+            Title = title;
+            Author = author;
+            ReleaseYear = releaseYear;
+        }
+    }
+
+    class Storage
+    {
+        private List<Book> _books = new List<Book>();
+
+        public Storage()
+        {
+            _books = new List<Book>();
         }
 
-        public void ShowDeck()
+        public void AddBook()
         {
-            foreach (var card in _card)
+            Console.WriteLine("Input title");
+            string title = Console.ReadLine();
+            Console.WriteLine("Input author");
+            string author = Console.ReadLine();
+            Console.WriteLine("Input year of release");
+            int releaseYear = Convert.ToInt32(Console.ReadLine());
+            _books.Add(new Book(title, author, releaseYear));
+        }
+
+        public void ShowAllBooks()
+        {
+            foreach (var book in _books)
             {
-                Console.WriteLine(card.Suit + " " + card.Value);
+                Console.WriteLine("Title: {0} | Author: {1} | Year: {2}", book.Title, book.Author, book.ReleaseYear);
+            }
+        }
+
+        public void RemoveBook()
+        {
+            Console.WriteLine("For remove enter book title:");
+            string title = Console.ReadLine();
+            Console.WriteLine("For remove enter book author:");
+            string author = Console.ReadLine();
+            _books.RemoveAll(Book => Book.Title == title && Book.Author == author);
+        }
+
+        public void ShowBooksByParametr()
+        {
+            Console.WriteLine("Push 1 to search book for title.");
+            Console.WriteLine("Push 2 to search book for author.");
+            Console.WriteLine("Push 3 to search book for relese year.");
+            int key = Convert.ToInt32(Console.ReadLine());
+
+            switch (key)
+            {
+                case 1:
+                    {
+                        Console.WriteLine("Enter the title:");
+                        string title = Console.ReadLine();
+                        List<Book> titleBooks = _books.FindAll(Book => Book.Title == title);
+
+                        if (titleBooks.Count == 0)
+                        {
+                            Console.WriteLine("Sorry, no books with this title");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Books by title'{0}':", title);
+
+                            foreach (Book book in titleBooks)
+                            {
+                                Console.WriteLine("Author: {0} | Year: {1}", book.Author, book.ReleaseYear);
+                            }
+                        }
+                        break;
+                    }
+                case 2:
+                    {
+                        Console.WriteLine("Enter the author:");
+                        string author = Console.ReadLine();
+                        List<Book> authorBooks = _books.FindAll(Book => Book.Author == author);
+
+                        if (authorBooks.Count == 0)
+                        {
+                            Console.WriteLine("Sorry, no books with from this author");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Books by author '{0}':", author);
+
+                            foreach (Book book in authorBooks)
+                            {
+                                Console.WriteLine("Title: {0} | Year: {1} ", book.Title, book.ReleaseYear);
+                            }
+                        }
+
+                        break;
+                    }
+                case 3:
+                    {
+                        Console.WriteLine("Enter the release year:");
+                        int releaseYear = Convert.ToInt32(Console.ReadLine());
+                        List<Book> releaseYearBooks = _books.FindAll(Book => Book.ReleaseYear == releaseYear);
+
+                        if (releaseYearBooks.Count == 0)
+                        {
+                            Console.WriteLine("Sorry, no books published int this year");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Books by release year '{0}':", releaseYear);
+
+                            foreach (Book book in releaseYearBooks)
+                            {
+                                Console.WriteLine("Title: {0} | Author: {1} ", book.Title, book.Author);
+                            }
+                        }
+                        break;
+                    }
+                default:
+                    {
+                        Console.WriteLine("Input correct number!");
+                        break;
+                    }
             }
         }
     }
