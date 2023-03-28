@@ -101,8 +101,8 @@ namespace _6.Task_5
             string title = Console.ReadLine();
             Console.WriteLine("For remove enter book author:");
             string author = Console.ReadLine();
-            int index=_books.FindIndex(Book => Book.Title == title && Book.Author == author);
-            _books.RemoveAt(index);     
+            int index=_books.FindIndex(Book => Book.Title.ToLower() == title.ToLower() && Book.Author.ToLower() == author.ToLower());
+            _books.RemoveAt(index);            
         }
 
         public void ShowBooksByParametr()
@@ -139,7 +139,7 @@ namespace _6.Task_5
         {
             Console.WriteLine("Enter the title:");
             string title = Console.ReadLine();
-            List<Book> titleBooks = _books.FindAll(Book => Book.Title == title);
+            List<Book> titleBooks = _books.FindAll(Book => Book.Title.ToLower() == title.ToLower());
 
             if (titleBooks.Count == 0)
             {
@@ -160,7 +160,7 @@ namespace _6.Task_5
         {
             Console.WriteLine("Enter the author:");
             string author = Console.ReadLine();
-            List<Book> authorBooks = _books.FindAll(Book => Book.Author == author);
+            List<Book> authorBooks = _books.FindAll(Book => Book.Author.ToLower() == author.ToLower());
 
             if (authorBooks.Count == 0)
             {
