@@ -83,7 +83,7 @@ namespace _6.Task_5
             Console.WriteLine("Input author");
             string author = Console.ReadLine();
             Console.WriteLine("Input year of release");
-            int releaseYear = Convert.ToInt32(Console.ReadLine());
+            int.TryParse(Console.ReadLine(), out int releaseYear);            
             _books.Add(new Book(title, author, releaseYear));
         }
 
