@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace _6.Task_5
 {
@@ -14,49 +12,42 @@ namespace _6.Task_5
 
             bool isWork = true;
 
+            const int FirstButton = 1;
+            const int SecondButton = 2;
+            const int ThirdButton = 3;
+            const int FourthButton = 4;
+            const int FifthButton = 5;
+
             while (isWork)
             {
-                int key;
-                Console.WriteLine("1. - add book");
-                Console.WriteLine("2. - show all book in storage");
-                Console.WriteLine("3. - remove book");
-                Console.WriteLine("4. - show book by parametr");
-                Console.WriteLine("5. - EXIT");
+                Console.WriteLine(FirstButton + " - add book");
+                Console.WriteLine(SecondButton + " - show all book in storage");
+                Console.WriteLine(ThirdButton + " - remove book");
+                Console.WriteLine(FourthButton + " - show book by parametr");
+                Console.WriteLine(FifthButton + " - EXIT");
 
-                key = Convert.ToInt32(Console.ReadLine());
+                int.TryParse(Console.ReadLine(), out int key);
 
                 switch (key)
                 {
-                    case 1:
-                        {
-                            storage.AddBook();
-                            break;
-                        }
-                    case 2:
-                        {
-                            storage.ShowAllBooks();
-                            break;
-                        }
-                    case 3:
-                        {
-                            storage.RemoveBook();
-                            break;
-                        }
-                    case 4:
-                        {
-                            storage.ShowBooksByParametr();
-                            break;
-                        }
-                    case 5:
-                        {
-                            isWork=false;
-                            break;
-                        }
+                    case FirstButton:
+                        storage.AddBook();
+                        break;
+                    case SecondButton:
+                        storage.ShowAllBooks();
+                        break;
+                    case ThirdButton:
+                        storage.RemoveBook();
+                        break;
+                    case FourthButton:
+                        storage.ShowBooksByParametr();
+                        break;
+                    case FifthButton:
+                        isWork = false;
+                        break;
                     default:
-                        {
-                            Console.WriteLine("Input correct number!");
-                            break;
-                        }
+                        Console.WriteLine("Input correct number!");
+                        break;
                 }
             }
         }
@@ -64,16 +55,16 @@ namespace _6.Task_5
 
     class Book
     {
-        public string Title { get; private set; }
-        public string Author { get; private set; }
-        public int ReleaseYear { get; private set; }
-
         public Book(string title, string author, int releaseYear)
         {
             Title = title;
             Author = author;
             ReleaseYear = releaseYear;
         }
+
+        public string Title { get; private set; }
+        public string Author { get; private set; }
+        public int ReleaseYear { get; private set; }
     }
 
     class Storage
@@ -100,7 +91,7 @@ namespace _6.Task_5
         {
             foreach (var book in _books)
             {
-                Console.WriteLine("Title: {0} | Author: {1} | Year: {2}", book.Title, book.Author, book.ReleaseYear);
+                Console.WriteLine($"Title: {book.Title} | Author: {book.Author} | Year: {book.ReleaseYear}");
             }
         }
 
@@ -110,87 +101,100 @@ namespace _6.Task_5
             string title = Console.ReadLine();
             Console.WriteLine("For remove enter book author:");
             string author = Console.ReadLine();
-            _books.RemoveAll(Book => Book.Title == title && Book.Author == author);
+            int index=_books.FindIndex(Book => Book.Title == title && Book.Author == author);
+            _books.RemoveAt(index);     
         }
 
         public void ShowBooksByParametr()
         {
-            Console.WriteLine("Push 1 to search book for title.");
-            Console.WriteLine("Push 2 to search book for author.");
-            Console.WriteLine("Push 3 to search book for relese year.");
-            int key = Convert.ToInt32(Console.ReadLine());
+            const int FirstButton = 1;
+            const int SecondButton = 2;
+            const int ThirdButton = 3;
+
+            Console.WriteLine($"Push {FirstButton} to search book for title.");
+            Console.WriteLine($"Push {SecondButton} to search book for author.");
+            Console.WriteLine($"Push {ThirdButton} to search book for relese year.");
+            int.TryParse(Console.ReadLine(), out int key);
 
             switch (key)
             {
-                case 1:
-                    {
-                        Console.WriteLine("Enter the title:");
-                        string title = Console.ReadLine();
-                        List<Book> titleBooks = _books.FindAll(Book => Book.Title == title);
-
-                        if (titleBooks.Count == 0)
-                        {
-                            Console.WriteLine("Sorry, no books with this title");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Books by title'{0}':", title);
-
-                            foreach (Book book in titleBooks)
-                            {
-                                Console.WriteLine("Author: {0} | Year: {1}", book.Author, book.ReleaseYear);
-                            }
-                        }
-                        break;
-                    }
-                case 2:
-                    {
-                        Console.WriteLine("Enter the author:");
-                        string author = Console.ReadLine();
-                        List<Book> authorBooks = _books.FindAll(Book => Book.Author == author);
-
-                        if (authorBooks.Count == 0)
-                        {
-                            Console.WriteLine("Sorry, no books with from this author");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Books by author '{0}':", author);
-
-                            foreach (Book book in authorBooks)
-                            {
-                                Console.WriteLine("Title: {0} | Year: {1} ", book.Title, book.ReleaseYear);
-                            }
-                        }
-
-                        break;
-                    }
-                case 3:
-                    {
-                        Console.WriteLine("Enter the release year:");
-                        int releaseYear = Convert.ToInt32(Console.ReadLine());
-                        List<Book> releaseYearBooks = _books.FindAll(Book => Book.ReleaseYear == releaseYear);
-
-                        if (releaseYearBooks.Count == 0)
-                        {
-                            Console.WriteLine("Sorry, no books published int this year");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Books by release year '{0}':", releaseYear);
-
-                            foreach (Book book in releaseYearBooks)
-                            {
-                                Console.WriteLine("Title: {0} | Author: {1} ", book.Title, book.Author);
-                            }
-                        }
-                        break;
-                    }
+                case FirstButton:
+                    ShowBooksByParametrTitle();
+                    break;
+                case SecondButton:
+                    ShowBooksByParametrAuthor();
+                    break;
+                case ThirdButton:
+                    ShowBooksByParametrYear();
+                    break;
                 default:
                     {
                         Console.WriteLine("Input correct number!");
                         break;
                     }
+            }
+        }
+
+        public void ShowBooksByParametrTitle()
+        {
+            Console.WriteLine("Enter the title:");
+            string title = Console.ReadLine();
+            List<Book> titleBooks = _books.FindAll(Book => Book.Title == title);
+
+            if (titleBooks.Count == 0)
+            {
+                Console.WriteLine("Sorry, no books with this title");
+            }
+            else
+            {
+                Console.WriteLine($"Books by title '{title}':");
+
+                foreach (Book book in titleBooks)
+                {
+                    Console.WriteLine($"Author: {book.Author} | Year: {book.ReleaseYear}");
+                }
+            }
+        }
+
+        public void ShowBooksByParametrAuthor()
+        {
+            Console.WriteLine("Enter the author:");
+            string author = Console.ReadLine();
+            List<Book> authorBooks = _books.FindAll(Book => Book.Author == author);
+
+            if (authorBooks.Count == 0)
+            {
+                Console.WriteLine("Sorry, no books with from this author");
+            }
+            else
+            {
+                Console.WriteLine($"Books by author '{author}':");
+
+                foreach (Book book in authorBooks)
+                {
+                    Console.WriteLine($"Title: {book.Title} | Year: {book.ReleaseYear} ");
+                }
+            }
+        }
+
+        public void ShowBooksByParametrYear()
+        {
+            Console.WriteLine("Enter the release year:");
+            int.TryParse(Console.ReadLine(), out int releaseYear);
+            List<Book> releaseYearBooks = _books.FindAll(Book => Book.ReleaseYear == releaseYear);
+
+            if (releaseYearBooks.Count == 0)
+            {
+                Console.WriteLine("Sorry, no books published int this year");
+            }
+            else
+            {
+                Console.WriteLine($"Books by release year '{releaseYear}':");
+
+                foreach (Book book in releaseYearBooks)
+                {
+                    Console.WriteLine($"Title: {book.Title} | Author: {book.Author} ");
+                }
             }
         }
     }
