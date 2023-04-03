@@ -12,37 +12,37 @@ namespace _6.Task_5
 
             bool isWork = true;
 
-            const int FirstButton = 1;
-            const int SecondButton = 2;
-            const int ThirdButton = 3;
-            const int FourthButton = 4;
-            const int FifthButton = 5;
+            const int AddBookCommand = 1;
+            const int ShowAllBookCommand = 2;
+            const int RemoveBookCommand = 3;
+            const int ShowBookByParametrCommand = 4;
+            const int ExitCommand = 5;
 
             while (isWork)
             {
-                Console.WriteLine(FirstButton + " - add book");
-                Console.WriteLine(SecondButton + " - show all book in storage");
-                Console.WriteLine(ThirdButton + " - remove book");
-                Console.WriteLine(FourthButton + " - show book by parametr");
-                Console.WriteLine(FifthButton + " - EXIT");
+                Console.WriteLine(AddBookCommand + " - add book");
+                Console.WriteLine(ShowAllBookCommand + " - show all book in storage");
+                Console.WriteLine(RemoveBookCommand + " - remove book");
+                Console.WriteLine(ShowBookByParametrCommand + " - show book by parametr");
+                Console.WriteLine(ExitCommand + " - EXIT");
 
                 int.TryParse(Console.ReadLine(), out int key);
 
                 switch (key)
                 {
-                    case FirstButton:
+                    case AddBookCommand:
                         storage.AddBook();
                         break;
-                    case SecondButton:
+                    case ShowAllBookCommand:
                         storage.ShowAllBooks();
                         break;
-                    case ThirdButton:
+                    case RemoveBookCommand:
                         storage.RemoveBook();
                         break;
-                    case FourthButton:
+                    case ShowBookByParametrCommand:
                         storage.ShowBooksByParametr();
                         break;
-                    case FifthButton:
+                    case ExitCommand:
                         isWork = false;
                         break;
                     default:
@@ -97,34 +97,39 @@ namespace _6.Task_5
 
         public void RemoveBook()
         {
-            Console.WriteLine("For remove enter book title:");
-            string title = Console.ReadLine();
-            Console.WriteLine("For remove enter book author:");
-            string author = Console.ReadLine();
-            int index=_books.FindIndex(Book => Book.Title.ToLower() == title.ToLower() && Book.Author.ToLower() == author.ToLower());
-            _books.RemoveAt(index);            
+            int i = 0;
+            Console.WriteLine("Enter the nubmer book for removed");
+
+            foreach (Book book in _books)
+            {                
+                Console.WriteLine($"{i + 1}. {book.Title} ({book.Author},{book.ReleaseYear})");
+                i++;
+            }
+
+            int.TryParse(Console.ReadLine(), out int resault);
+            _books.RemoveAt(resault-1);            
         }
 
         public void ShowBooksByParametr()
         {
-            const int FirstButton = 1;
-            const int SecondButton = 2;
-            const int ThirdButton = 3;
+            const int SearchBookForTitleCommand = 1;
+            const int SearchBookForAuthorCommand = 2;
+            const int SearchBookForYearComand = 3;
 
-            Console.WriteLine($"Push {FirstButton} to search book for title.");
-            Console.WriteLine($"Push {SecondButton} to search book for author.");
-            Console.WriteLine($"Push {ThirdButton} to search book for relese year.");
+            Console.WriteLine($"Push {SearchBookForTitleCommand} to search book for title.");
+            Console.WriteLine($"Push {SearchBookForAuthorCommand} to search book for author.");
+            Console.WriteLine($"Push {SearchBookForYearComand} to search book for relese year.");
             int.TryParse(Console.ReadLine(), out int key);
 
             switch (key)
             {
-                case FirstButton:
+                case SearchBookForTitleCommand:
                     ShowBooksByParametrTitle();
                     break;
-                case SecondButton:
+                case SearchBookForAuthorCommand:
                     ShowBooksByParametrAuthor();
                     break;
-                case ThirdButton:
+                case SearchBookForYearComand:
                     ShowBooksByParametrYear();
                     break;
                 default:
