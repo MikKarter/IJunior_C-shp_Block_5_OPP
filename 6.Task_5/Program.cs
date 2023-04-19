@@ -8,15 +8,15 @@ namespace _6.Task_5
     {
         static void Main(string[] args)
         {
-            Storage storage = new Storage();
-
-            bool isWork = true;
-
             const int AddBookCommand = 1;
             const int ShowAllBookCommand = 2;
             const int RemoveBookCommand = 3;
             const int ShowBookByParametrCommand = 4;
             const int ExitCommand = 5;
+
+            Storage storage = new Storage();
+
+            bool isWork = true;
 
             while (isWork)
             {
@@ -33,18 +33,23 @@ namespace _6.Task_5
                     case AddBookCommand:
                         storage.AddBook();
                         break;
+
                     case ShowAllBookCommand:
                         storage.ShowAllBooks();
                         break;
+
                     case RemoveBookCommand:
                         storage.RemoveBook();
                         break;
+
                     case ShowBookByParametrCommand:
                         storage.ShowBooksByParametr();
                         break;
+
                     case ExitCommand:
                         isWork = false;
                         break;
+
                     default:
                         Console.WriteLine("Input correct number!");
                         break;
@@ -65,6 +70,24 @@ namespace _6.Task_5
         public string Title { get; private set; }
         public string Author { get; private set; }
         public int ReleaseYear { get; private set; }
+
+        public void SearchPartialMatch(string text)
+        {
+            string tempText = "";
+
+            while (tempText.Length <= text.Length)
+            {
+                foreach (var symbol in Title)
+                {
+                    tempText += symbol;
+
+                    if (tempText.ToLower() == text.ToLower())
+                    {
+                        Console.WriteLine(Title + " | " + Author + " | " + ReleaseYear);
+                    }
+                }
+            }
+        }
     }
 
     class Storage
@@ -83,7 +106,7 @@ namespace _6.Task_5
             Console.WriteLine("Input author");
             string author = Console.ReadLine();
             Console.WriteLine("Input year of release");
-            int.TryParse(Console.ReadLine(), out int releaseYear);            
+            int.TryParse(Console.ReadLine(), out int releaseYear);
             _books.Add(new Book(title, author, releaseYear));
         }
 
@@ -97,17 +120,17 @@ namespace _6.Task_5
 
         public void RemoveBook()
         {
-            int i = 0;
+            int i = 1;
             Console.WriteLine("Enter the nubmer book for removed");
 
             foreach (Book book in _books)
-            {                
-                Console.WriteLine($"{i + 1}. {book.Title} ({book.Author},{book.ReleaseYear})");
+            {
+                Console.WriteLine($"{i}. {book.Title} ({book.Author},{book.ReleaseYear})");
                 i++;
             }
 
             int.TryParse(Console.ReadLine(), out int resault);
-            _books.RemoveAt(resault-1);            
+            _books.RemoveAt(resault - 1);
         }
 
         public void ShowBooksByParametr()
@@ -144,20 +167,10 @@ namespace _6.Task_5
         {
             Console.WriteLine("Enter the title:");
             string title = Console.ReadLine();
-            List<Book> titleBooks = _books.FindAll(Book => Book.Title.ToLower() == title.ToLower());
-
-            if (titleBooks.Count == 0)
+            
+            foreach (var book in _books)
             {
-                Console.WriteLine("Sorry, no books with this title");
-            }
-            else
-            {
-                Console.WriteLine($"Books by title '{title}':");
-
-                foreach (Book book in titleBooks)
-                {
-                    Console.WriteLine($"Author: {book.Author} | Year: {book.ReleaseYear}");
-                }
+                book.SearchPartialMatch(title);
             }
         }
 
