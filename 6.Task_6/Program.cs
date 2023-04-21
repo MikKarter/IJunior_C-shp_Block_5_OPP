@@ -23,7 +23,7 @@ namespace _6.Task_6
             bool isTrade = true;
             int userInput;
             int money;
-            Shop shop = new Shop();
+            Shop shop = new Shop(1000,5000);
 
             while (isTrade)
             {
@@ -108,20 +108,17 @@ namespace _6.Task_6
 
         public void SellProduct(int index)
         {
-            //index--;
             products.RemoveAt(index);
         }
 
         public int ShowProductPrice(int index)
         {
-            //index--;
             Product product = products[index];            
             return product.Price;
         }
 
         public string ShowProductName(int index)
         {
-            //index--;
             Product product = products[index];
             return product.Name;
         }
@@ -134,6 +131,11 @@ namespace _6.Task_6
         public void TakeMoney(int money)
         {
             this.Money -= money;
+        }
+
+        public void AddProduct(string name, int price)
+        {
+            products.Add(new Product(name, price));
         }
 
     }
@@ -153,11 +155,6 @@ namespace _6.Task_6
             int.TryParse(Console.ReadLine(), out int result);
             products.Add(new Product(name, result));
         }
-
-        public void AddProduct(string name, int price)
-        {
-            products.Add(new Product(name, price));
-        }
     }
 
     class Player : Merchants
@@ -166,22 +163,16 @@ namespace _6.Task_6
         {
             this.Money = money;            
         }
-
-        public void AddProduct(string name, int price)
-        {
-            products.Add(new Product(name, price));
-        }
     }
 
     class Shop
     {
-        public Shop ()
+        public Shop (int moneySeller, int moneyPlayer)        
         {
-
+            Seller seller = new Seller(moneySeller);
+            Player player = new Player(moneyPlayer);
         }
 
-        Seller seller = new Seller(1000);
-        Player player = new Player(5000);
 
         public void ShowSellerProductList ()
         {
