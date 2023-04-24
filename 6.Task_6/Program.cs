@@ -1,11 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace _6.Task_6
 {
@@ -15,22 +9,19 @@ namespace _6.Task_6
         {
             const int ShowAllProductCommand = 1;
             const int ShowInventoryCommand = 2;
-            const int BuyItemCommand = 3;
-            const int SellItemCommand = 4;
-            const int AddProductToSellCommand = 5;
-            const int ExitCommand = 6;
+            const int BuyItemCommand = 3;            
+            const int AddProductToSellCommand = 4;
+            const int ExitCommand = 5;
 
-            bool isTrade = true;
-            int userInput;
+            bool isTrade = true;            
             int money;
-            Shop shop = new Shop(1000,5000);
+            Shop shop = new Shop();
 
             while (isTrade)
             {
                 Console.WriteLine($" {ShowAllProductCommand} - Show All items for buying");                
                 Console.WriteLine($" {ShowInventoryCommand} - show you inventory");
-                Console.WriteLine($" {BuyItemCommand} - Buy item from Seller");
-                Console.WriteLine($" {SellItemCommand} - Sell item from inventory");
+                Console.WriteLine($" {BuyItemCommand} - Buy item from Seller");                
                 Console.WriteLine($" {AddProductToSellCommand} - add procudt to seller list");
                 Console.WriteLine($" {ExitCommand} - FINISH TRADE");
                 money = shop.ShowPlayerMoney();
@@ -43,25 +34,23 @@ namespace _6.Task_6
                     case ShowAllProductCommand:
                         shop.ShowSellerProductList();
                         break;
+
                     case ShowInventoryCommand:
                         shop.ShowPlayerInventoryList();
                         break;
+
                     case BuyItemCommand:
-                        Console.WriteLine("Input product number:");
-                        int.TryParse(Console.ReadLine(), out userInput);
-                        shop.SellSellerProduct(userInput);
+                        shop.SellSellerProduct();
                         break;
-                    case SellItemCommand:
-                        Console.WriteLine("Input product number:");
-                        int.TryParse(Console.ReadLine(), out userInput);
-                        shop.SellPlayerProduct(userInput);
-                        break;
+
                     case AddProductToSellCommand:
                         shop.CreateProductForSell();
                         break;
+
                     case ExitCommand:
                         isTrade = false;
                         break;
+
                     default:
                         Console.WriteLine("Enter corret number!");
                         break;
@@ -84,12 +73,12 @@ namespace _6.Task_6
 
     class Merchants
     {
-        protected List<Product> products = new List<Product>();
+        protected List<Product> Products = new List<Product>();
                 
         public Merchants(int money)
         {
-            this.Money = money;
-            products = new List<Product>();
+            Money = money;
+            Products = new List<Product>();
         }
 
         public int Money { get; protected set; }
@@ -98,7 +87,7 @@ namespace _6.Task_6
         {
             int i = 1;
 
-            foreach (var product in products)
+            foreach (var product in Products)
             {
                 Console.Write($"{i}. {product.Name}");
                 Console.WriteLine($"({product.Price})");
@@ -106,36 +95,34 @@ namespace _6.Task_6
             }
         }
 
-        public void SellProduct(int index)
+        public int GetProductPrice(int index)
         {
-            products.RemoveAt(index);
+            if (Products.Count > index)
+            {
+                Product product = Products[index];
+                return product.Price;
+            }
+            else
+            {
+                return 0;
+            }
         }
 
-        public int ShowProductPrice(int index)
+        public string GetProductName(int index)
         {
-            Product product = products[index];            
-            return product.Price;
-        }
-
-        public string ShowProductName(int index)
-        {
-            Product product = products[index];
+            //index--;
+            Product product = Products[index];
             return product.Name;
         }
 
-        public void GiveMoney(int money)
+        public void GetMoney(int money)
         {
-            this.Money += money;
+            Money += money;
         }
 
         public void TakeMoney(int money)
         {
             this.Money -= money;
-        }
-
-        public void AddProduct(string name, int price)
-        {
-            products.Add(new Product(name, price));
         }
 
     }
@@ -144,7 +131,7 @@ namespace _6.Task_6
     {
         public Seller(int money) : base(money)
         {
-            this.Money = money;
+            Money = money;
         }       
 
         public void CreateProduct()
@@ -153,7 +140,22 @@ namespace _6.Task_6
             string name = Console.ReadLine();
             Console.WriteLine("Enter the price:");
             int.TryParse(Console.ReadLine(), out int result);
-            products.Add(new Product(name, result));
+            Products.Add(new Product(name, result));
+        }
+
+        public Product GetProduct(int index)
+        {
+            return Products[index];
+        }
+
+        public void SellProduct(Product product)
+        {
+            Products.Remove(product);
+        }
+
+        public int GetProductCount()
+        {
+            return Products.Count;
         }
     }
 
@@ -161,18 +163,24 @@ namespace _6.Task_6
     {        
         public Player(int money) : base(money)
         {
-            this.Money = money;            
+            Money = money;            
+        }
+
+        public void AddProduct(string name, int price)
+        {
+            Products.Add(new Product(name, price));
         }
     }
 
     class Shop
     {
-        public Shop (int moneySeller, int moneyPlayer)        
+        public Shop ()
         {
-            Seller seller = new Seller(moneySeller);
-            Player player = new Player(moneyPlayer);
+
         }
 
+        Seller seller = new Seller(1000);
+        Player player = new Player(5000);
 
         public void ShowSellerProductList ()
         {
@@ -184,40 +192,32 @@ namespace _6.Task_6
             player.ShowAllProducts();
         }
 
-        public void SellSellerProduct(int index)
+        public void SellSellerProduct()
         {
+            Console.WriteLine("Input product number:");
+            int.TryParse(Console.ReadLine(), out int index);
             index--;
 
-            if (seller.ShowProductPrice(index)<=player.Money)
-            {                
-                player.AddProduct(seller.ShowProductName(index), seller.ShowProductPrice(index));
-                player.TakeMoney(seller.ShowProductPrice(index));
-                seller.GiveMoney(seller.ShowProductPrice(index));
-                seller.SellProduct(index);
+            if (index<seller.GetProductCount())
+            {
+                if (seller.GetProductPrice(index) <= player.Money)
+                {
+                    player.AddProduct(seller.GetProductName(index), seller.GetProductPrice(index));
+                    player.TakeMoney(seller.GetProductPrice(index));
+                    seller.GetMoney(seller.GetProductPrice(index));
+                    seller.SellProduct(seller.GetProduct(index));
+                }
+                else
+                {
+                    Console.WriteLine("Not enough money!");
+                }
             }
             else
             {
-                Console.WriteLine("Not enough money!");
+                Console.WriteLine("This product does not exist");
             }
-        }
-
-        public void SellPlayerProduct(int index)
-        {
-            index--;
-
-            if (player.ShowProductPrice(index) <= seller.Money)
-            {                
-                seller.AddProduct(player.ShowProductName(index), player.ShowProductPrice(index));
-                seller.TakeMoney(player.ShowProductPrice(index));
-                player.GiveMoney(player.ShowProductPrice(index));
-                player.SellProduct(index);
-            }
-            else
-            {
-                Console.WriteLine("Not enough money!");
-            }
-        }
-
+        }       
+        
         public void CreateProductForSell()
         {
             seller.CreateProduct();
@@ -225,7 +225,7 @@ namespace _6.Task_6
 
         public int ShowPlayerMoney()
         {
-            return player.Money;
+            return player.Money;        
         }
     }
 }
