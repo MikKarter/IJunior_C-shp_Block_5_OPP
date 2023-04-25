@@ -15,7 +15,9 @@ namespace _6.Task_6
 
             bool isTrade = true;            
             int money;
-            Shop shop = new Shop();
+            Seller seller = new Seller(1000);
+            Player player = new Player(5000);
+            Shop shop = new Shop(seller, player);
 
             while (isTrade)
             {
@@ -61,27 +63,25 @@ namespace _6.Task_6
 
     class Product
     {
+        public string Name { get; private set; }
+        public int Price { get; private set; }
         public Product(string name, int price)
         {
             Name = name;
             Price = price;
         }
-
-        public string Name { get; private set; }
-        public int Price { get; private set; }
     }
 
     class Merchants
     {
         protected List<Product> Products = new List<Product>();
-                
+        public int Money { get; protected set; }
+
         public Merchants(int money)
         {
             Money = money;
             Products = new List<Product>();
-        }
-
-        public int Money { get; protected set; }
+        }        
 
         public void ShowAllProducts()
         {
@@ -174,22 +174,22 @@ namespace _6.Task_6
 
     class Shop
     {
-        public Shop ()
+        public Seller _seller { get; private set; }
+        public Player _player { get; private set; }
+        public Shop (Seller seller, Player player)
         {
-
-        }
-
-        Seller seller = new Seller(1000);
-        Player player = new Player(5000);
+            _seller = seller;
+            _player = player;
+        }        
 
         public void ShowSellerProductList ()
         {
-            seller.ShowAllProducts();
+            _seller.ShowAllProducts();
         }
 
         public void ShowPlayerInventoryList()
         {
-            player.ShowAllProducts();
+            _player.ShowAllProducts();
         }
 
         public void SellSellerProduct()
@@ -198,14 +198,14 @@ namespace _6.Task_6
             int.TryParse(Console.ReadLine(), out int index);
             index--;
 
-            if (index<seller.GetProductCount())
+            if (index<_seller.GetProductCount() && index>0)
             {
-                if (seller.GetProductPrice(index) <= player.Money)
+                if (_seller.GetProductPrice(index) <= _player.Money)
                 {
-                    player.AddProduct(seller.GetProductName(index), seller.GetProductPrice(index));
-                    player.TakeMoney(seller.GetProductPrice(index));
-                    seller.GetMoney(seller.GetProductPrice(index));
-                    seller.SellProduct(seller.GetProduct(index));
+                    _player.AddProduct(_seller.GetProductName(index), _seller.GetProductPrice(index));
+                    _player.TakeMoney(_seller.GetProductPrice(index));
+                    _seller.GetMoney(_seller.GetProductPrice(index));
+                    _seller.SellProduct(_seller.GetProduct(index));
                 }
                 else
                 {
@@ -220,12 +220,12 @@ namespace _6.Task_6
         
         public void CreateProductForSell()
         {
-            seller.CreateProduct();
+            _seller.CreateProduct();
         }
 
         public int ShowPlayerMoney()
         {
-            return player.Money;        
+            return _player.Money;        
         }
     }
 }
