@@ -95,6 +95,19 @@ namespace _6.Task_6
             }
         }
 
+        public string GetProductName(int index)
+        {            
+            Product product = Products[index];
+            return product.Name;
+        }
+    }
+
+    class Seller : Merchants
+    {
+        public Seller(int money) : base(money)
+        {
+            Money = money;
+        }
         public int GetProductPrice(int index)
         {
             if (Products.Count > index)
@@ -107,32 +120,6 @@ namespace _6.Task_6
                 return 0;
             }
         }
-
-        public string GetProductName(int index)
-        {
-            //index--;
-            Product product = Products[index];
-            return product.Name;
-        }
-
-        public void GetMoney(int money)
-        {
-            Money += money;
-        }
-
-        public void TakeMoney(int money)
-        {
-            this.Money -= money;
-        }
-
-    }
-
-    class Seller : Merchants
-    {
-        public Seller(int money) : base(money)
-        {
-            Money = money;
-        }       
 
         public void CreateProduct()
         {
@@ -157,6 +144,11 @@ namespace _6.Task_6
         {
             return Products.Count;
         }
+
+        public void GetMoney(int money)
+        {
+            Money += money;
+        }
     }
 
     class Player : Merchants
@@ -169,6 +161,11 @@ namespace _6.Task_6
         public void AddProduct(string name, int price)
         {
             Products.Add(new Product(name, price));
+        }
+
+        public void TakeMoney(int money)
+        {
+            this.Money -= money;
         }
     }
 
@@ -198,7 +195,7 @@ namespace _6.Task_6
             int.TryParse(Console.ReadLine(), out int index);
             index--;
 
-            if (index<_seller.GetProductCount() && index>0)
+            if (index<_seller.GetProductCount() && index>=0)
             {
                 if (_seller.GetProductPrice(index) <= _player.Money)
                 {

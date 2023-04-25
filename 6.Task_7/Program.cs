@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace _6.Task_7
 {
@@ -13,21 +10,71 @@ namespace _6.Task_7
         }
     }
 
-    class RaliwayCarriage
+    class RailwayStantion
     {
-        public int NumberOfPassengers { get; private set; }
-        public int MaxPlace{ get; private set; }
+        private TicketTradeOffice Cashier = new TicketTradeOffice();
+
+    }
+
+    class RaliwayWagon
+    {
+        public int NumberOfRaliwayCarriage { get; private set; }
+        public int MaxPlace { get; private set; }
         public int FreePlace { get; private set; }
 
-        public RaliwayCarriage (int numberOfPassengers, int maxPlace, int freePlace)
+        public RaliwayWagon(int maxPlace)
         {
-            NumberOfPassengers = numberOfPassengers;
             MaxPlace = maxPlace;
-            FreePlace = maxPlace - numberOfPassengers;
+            FreePlace = MaxPlace;
+        }
+
+        public void CreateRailwayWagon()
+        {
+            Console.WriteLine("How many railway wagon will be on the train?");
+            int.TryParse(Console.ReadLine(), out int userInput);
+            NumberOfRaliwayCarriage = userInput;
+        }
+
+        public void ReduceFreePlace(int purchasedTickets)
+        {
+            if (FreePlace > purchasedTickets)
+            {
+                FreePlace = MaxPlace - purchasedTickets;
+            }
+            else
+            {
+                Console.WriteLine("Not enough place in this railway wagon!");
+            }
+        }        
+    }
+
+    class Train
+    {
+        public List<RaliwayWagon> RaliwayCarriages { get; private set; }
+        //public Dictionary<string, int> Trains { get; private set; }
+        public Train ()
+        {
+            RaliwayCarriages = new List<RaliwayWagon>();
+        }
+
+        public void CreateTrain()
+        {
+
         }
     }
 
-    class TicketTrade
+    class Direction
+    {
+        public string DeparturePlace { get; private set; }
+        public string ArrivePlace { get; private set; }
+
+        public Direction(string departurePlace, string arrivePlace)
+        {
+            DeparturePlace = departurePlace;
+            ArrivePlace = arrivePlace;
+        }
+    }
+    class TicketTradeOffice
     {
         private Random _random = new Random();
         private int _ticketSoldMin = 0;
@@ -40,11 +87,5 @@ namespace _6.Task_7
             Console.WriteLine($"Продано {_countSoldTicket} билетов");
             return _countSoldTicket;
         }
-    }
-
-    class Train
-    {        
-        public List<RaliwayCarriage> RaliwayCarriages { get; private set; }
-        public Dictionary<string, int> Trains { get; private set; }
     }
 }
