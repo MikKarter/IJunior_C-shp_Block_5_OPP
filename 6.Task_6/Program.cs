@@ -62,26 +62,28 @@ namespace _6.Task_6
     }
 
     class Product
-    {
-        public string Name { get; private set; }
-        public int Price { get; private set; }
+    {        
         public Product(string name, int price)
         {
             Name = name;
             Price = price;
         }
+
+        public string Name { get; private set; }
+        public int Price { get; private set; }
     }
 
     class Merchants
     {
         protected List<Product> Products = new List<Product>();
-        public int Money { get; protected set; }
 
         public Merchants(int money)
         {
             Money = money;
             Products = new List<Product>();
-        }        
+        }
+
+        public int Money { get; protected set; }
 
         public void ShowAllProducts()
         {
@@ -93,13 +95,7 @@ namespace _6.Task_6
                 Console.WriteLine($"({product.Price})");
                 i++;
             }
-        }
-
-        public string GetProductName(int index)
-        {            
-            Product product = Products[index];
-            return product.Name;
-        }
+        }        
     }
 
     class Seller : Merchants
@@ -107,19 +103,7 @@ namespace _6.Task_6
         public Seller(int money) : base(money)
         {
             Money = money;
-        }
-        public int GetProductPrice(int index)
-        {
-            if (Products.Count > index)
-            {
-                Product product = Products[index];
-                return product.Price;
-            }
-            else
-            {
-                return 0;
-            }
-        }
+        }       
 
         public void CreateProduct()
         {
@@ -145,9 +129,28 @@ namespace _6.Task_6
             return Products.Count;
         }
 
+        public int GetProductPrice(int index)
+        {
+            if (Products.Count > index)
+            {
+                Product product = Products[index];
+                return product.Price;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
         public void GetMoney(int money)
         {
             Money += money;
+        }
+
+        public string GetProductName(int index)
+        {
+            Product product = Products[index];
+            return product.Name;
         }
     }
 
@@ -165,19 +168,20 @@ namespace _6.Task_6
 
         public void TakeMoney(int money)
         {
-            this.Money -= money;
+            Money -= money;
         }
     }
 
     class Shop
     {
-        public Seller _seller { get; private set; }
-        public Player _player { get; private set; }
         public Shop (Seller seller, Player player)
         {
             _seller = seller;
             _player = player;
-        }        
+        }
+
+        public Seller _seller { get; private set; }
+        public Player _player { get; private set; }
 
         public void ShowSellerProductList ()
         {
@@ -195,7 +199,7 @@ namespace _6.Task_6
             int.TryParse(Console.ReadLine(), out int index);
             index--;
 
-            if (index<_seller.GetProductCount() && index>=0)
+            if (index<_seller.GetProductCount() && index>0)
             {
                 if (_seller.GetProductPrice(index) <= _player.Money)
                 {
