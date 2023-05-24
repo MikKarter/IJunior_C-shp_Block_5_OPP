@@ -15,9 +15,8 @@ namespace _6.Task_6
 
             bool isTrade = true;            
             int money;
-            Seller seller = new Seller(1000);
-            Player player = new Player(5000);
-            Shop shop = new Shop(seller, player);
+
+            Shop shop = new Shop();
 
             while (isTrade)
             {
@@ -42,7 +41,7 @@ namespace _6.Task_6
                         break;
 
                     case BuyItemCommand:
-                        shop.SellSellerProduct();
+                        shop.TransferProduct();
                         break;
 
                     case AddProductToSellCommand:
@@ -114,43 +113,32 @@ namespace _6.Task_6
             Products.Add(new Product(name, result));
         }
 
-        public Product GetProduct(int index)
+        public void Sell(Product product)
         {
-            return Products[index];
-        }
-
-        public void SellProduct(Product product)
-        {
+            GetMoney(product.Price);
             Products.Remove(product);
-        }
-
-        public int GetProductCount()
-        {
-            return Products.Count;
-        }
-
-        public int GetProductPrice(int index)
-        {
-            if (Products.Count > index)
-            {
-                Product product = Products[index];
-                return product.Price;
-            }
-            else
-            {
-                return 0;
-            }
-        }
+        }     
 
         public void GetMoney(int money)
         {
             Money += money;
         }
 
-        public string GetProductName(int index)
+        public bool TryGetProduct (out Product product)
         {
-            Product product = Products[index];
-            return product.Name;
+            Console.WriteLine("Input product number:");
+            int.TryParse(Console.ReadLine(), out int number);
+
+            if (number>0&& number<=Products.Count)
+            {
+                product = Products[number-1];
+                return true;
+            }
+            else 
+            {
+                product = null;                
+                return false; 
+            }
         }
     }
 
@@ -161,27 +149,28 @@ namespace _6.Task_6
             Money = money;            
         }
 
-        public void AddProduct(string name, int price)
+        public void Buy(Product product)
         {
-            Products.Add(new Product(name, price));
+            Products.Add(product);
+            Money -= product.Price;
         }
 
-        public void TakeMoney(int money)
+        public bool CanPay(int price)
         {
-            Money -= money;
+            return Money >= price;
         }
     }
 
     class Shop
     {
-        public Shop (Seller seller, Player player)
-        {
-            _seller = seller;
-            _player = player;
-        }
+        private Seller _seller;
+        private Player _player;
 
-        public Seller _seller { get; private set; }
-        public Player _player { get; private set; }
+        public Shop ()
+        {
+            _seller = new Seller (0);
+            _player = new Player(5000);
+        }
 
         public void ShowSellerProductList ()
         {
@@ -193,30 +182,22 @@ namespace _6.Task_6
             _player.ShowAllProducts();
         }
 
-        public void SellSellerProduct()
+        public void TransferProduct()
         {
-            Console.WriteLine("Input product number:");
-            int.TryParse(Console.ReadLine(), out int index);
-            index--;
+            if (_seller.TryGetProduct(out Product product)==false)
+            {
+                Console.WriteLine("Incorrect number!");
+                return;
+            }
 
-            if (index<_seller.GetProductCount() && index>0)
+            if (_player.CanPay(product.Price) == false) 
             {
-                if (_seller.GetProductPrice(index) <= _player.Money)
-                {
-                    _player.AddProduct(_seller.GetProductName(index), _seller.GetProductPrice(index));
-                    _player.TakeMoney(_seller.GetProductPrice(index));
-                    _seller.GetMoney(_seller.GetProductPrice(index));
-                    _seller.SellProduct(_seller.GetProduct(index));
-                }
-                else
-                {
-                    Console.WriteLine("Not enough money!");
-                }
+                Console.WriteLine("Not enough money!");
+                return;
             }
-            else
-            {
-                Console.WriteLine("This product does not exist");
-            }
+
+            _player.Buy(product);            
+            _seller.Sell(product);         
         }       
         
         public void CreateProductForSell()
