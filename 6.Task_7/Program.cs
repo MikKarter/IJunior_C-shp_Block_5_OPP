@@ -1,91 +1,172 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
-namespace _6.Task_7
+internal class Program
 {
-    internal class Program
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
+        TrainPlanner trainPlanner = new TrainPlanner();
+
+        while (true)
         {
-        }
-    }
+            trainPlanner.ShowTrainInfo();
 
-    class RailwayStantion
-    {
-        private TicketTradeOffice Cashier = new TicketTradeOffice();
+            int choice = trainPlanner.GetChoice();
 
-    }
-
-    class RaliwayWagon
-    {
-        public int NumberOfRaliwayCarriage { get; private set; }
-        public int MaxPlace { get; private set; }
-        public int FreePlace { get; private set; }
-
-        public RaliwayWagon(int maxPlace)
-        {
-            MaxPlace = maxPlace;
-            FreePlace = MaxPlace;
-        }
-
-        public void CreateRailwayWagon()
-        {
-            Console.WriteLine("How many railway wagon will be on the train?");
-            int.TryParse(Console.ReadLine(), out int userInput);
-            NumberOfRaliwayCarriage = userInput;
-        }
-
-        public void ReduceFreePlace(int purchasedTickets)
-        {
-            if (FreePlace > purchasedTickets)
+            switch (choice)
             {
-                FreePlace = MaxPlace - purchasedTickets;
+                case 1:
+                    trainPlanner.CreateDirection();
+                    break;
+                case 2:
+                    trainPlanner.SellTickets();
+                    break;
+                case 3:
+                    trainPlanner.CreateTrain();
+                    break;
+                case 4:
+                    trainPlanner.SendTrain();
+                    break;
+                case 5:
+                    Environment.Exit(0);
+                    break;
+                default:
+                    Console.WriteLine("Неправильный выбор. Пожалуйста, выберите действие от 1 до 5.");
+                    break;
             }
-            else
-            {
-                Console.WriteLine("Not enough place in this railway wagon!");
-            }
-        }        
+
+            Console.WriteLine();
+        }
     }
 
-    class Train
+    class TrainPlanner
     {
-        public List<RaliwayWagon> RaliwayCarriages { get; private set; }
-        //public Dictionary<string, int> Trains { get; private set; }
-        public Train ()
+        string direction;
+        int passengerCount;
+        int trainCapacity;
+        bool trainCreated;
+        bool trainSent;
+
+        public int GetChoice()
         {
-            RaliwayCarriages = new List<RaliwayWagon>();
+            Console.Write("Выберите действие: ");
+            string input = Console.ReadLine();
+            int choice;
+            int.TryParse(input, out choice);
+            return choice;
+        }
+
+        public void CreateDirection()
+        {
+            Console.Write("Введите направление: ");
+            direction = Console.ReadLine();
+            Console.WriteLine($"Направление '{direction}' успешно создано.");
+            ResetState();
+        }
+
+        public void SellTickets()
+        {
+            if (string.IsNullOrEmpty(direction))
+            {
+                Console.WriteLine("Сначала создайте направление.");
+                return;
+            }
+
+            Random random = new Random();
+            passengerCount = random.Next(1, 100);
+            Console.WriteLine($"Продано {passengerCount} билетов на направление '{direction}'.");
         }
 
         public void CreateTrain()
         {
+            if (string.IsNullOrEmpty(direction))
+            {
+                Console.WriteLine("Сначала создайте направление.");
+                return;
+            }
 
+            if (passengerCount == 0)
+            {
+                Console.WriteLine("Сначала продайте билеты.");
+                return;
+            }
+
+            Console.Write("Введите вместимость поезда: ");
+            string input = Console.ReadLine();
+            int.TryParse(input, out trainCapacity);
+
+            if (trainCapacity <= 0)
+            {
+                Console.WriteLine("Неправильная вместимость. Вместимость поезда должна быть положительным числом.");
+                return;
+            }
+
+            if (trainCapacity >= passengerCount)
+            {
+                Console.WriteLine("Поезд сформирован успешно.");
+                trainCreated = true;
+            }
+            else
+            {
+                Console.WriteLine("Вместимость поезда недостаточна для перевозки всех пассажиров. Увеличьте вместимость или продайте меньше билетов.");
+            }
         }
-    }
 
-    class Direction
-    {
-        public string DeparturePlace { get; private set; }
-        public string ArrivePlace { get; private set; }
-
-        public Direction(string departurePlace, string arrivePlace)
+        public void SendTrain()
         {
-            DeparturePlace = departurePlace;
-            ArrivePlace = arrivePlace;
+            if (string.IsNullOrEmpty(direction))
+            {
+                Console.WriteLine("Сначала создайте направление.");
+                return;
+            }
+
+            if (passengerCount == 0)
+            {
+                Console.WriteLine("Сначала продайте билеты.");
+                return;
+            }
+
+            if (!trainCreated)
+            {
+                Console.WriteLine("Сначала сформируйте поезд.");
+                return;
+            }
+
+            Console.WriteLine($"Поезд на направлении '{direction}' успешно отправлен с {trainCapacity} вагонами.");
+            ResetState();
         }
-    }
-    class TicketTradeOffice
-    {
-        private Random _random = new Random();
-        private int _ticketSoldMin = 0;
-        private int _ticketSoldMax = 51;
-        private int _countSoldTicket;
 
-        public int Sell()
+        public void ResetState()
         {
-            _countSoldTicket = _random.Next(_ticketSoldMin, _ticketSoldMax);
-            Console.WriteLine($"Продано {_countSoldTicket} билетов");
-            return _countSoldTicket;
+            passengerCount = 0;
+            trainCapacity = 0;
+            trainCreated = false;
+            trainSent = false;
+        }
+
+        public void ShowTrainInfo()
+        {
+            Console.WriteLine("=== Информация о следующем отправлении:");
+            Console.WriteLine($"Направление - {direction}");
+            Console.WriteLine($"Продано билетов - {passengerCount}");
+            Console.Write($"Поезд готов к отправлению? - ");
+
+            if (trainCreated)
+            {
+                Console.WriteLine("Да");
+            }
+            else
+            {
+                Console.WriteLine("Нет");
+            }
+
+            Console.WriteLine("=== Планировщик поезда ===");
+            Console.WriteLine("1. Создать направление");
+            Console.WriteLine("2. Продать билеты");
+            Console.WriteLine("3. Сформировать поезд");
+            Console.WriteLine("4. Отправить поезд");
+            Console.WriteLine("5. Выйти");
+            Console.WriteLine("==========================");
         }
     }
 }
