@@ -28,7 +28,7 @@ class TrainPlanner
             switch (userInput)
             {
                 case StartProgramCommand:
-                    CreateDirection();
+                    CreateTrain();
                     break;
 
                 case EndProgramCommand:
@@ -56,25 +56,42 @@ class TrainPlanner
         return quantityTickets;
     }
 
-    private void CreateDirection()
+    private Direction CreateDirection()
     {
-        Console.WriteLine("Введите пункт отправления:");
-        string departureName = Console.ReadLine();
-        Console.WriteLine("Введите пункт прибытия:");
-        string arriveName = Console.ReadLine();
-
-        if (departureName != arriveName)
+        bool isCreated = false;
+        Direction direction = null ;
+       
+        while (!isCreated)
         {
-            Direction direction = new Direction(departureName, arriveName);
-            Train train = new Train();
+            Console.WriteLine("Введите пункт отправления:");
+            string departureName = Console.ReadLine();
+            Console.WriteLine("Введите пункт прибытия:");
+            string arriveName = Console.ReadLine();
 
-            direction.ShowDirectionInfo();
-            PassengerBoarding(train);
+            if (departureName != arriveName)
+            {
+                direction = new Direction(departureName, arriveName);
+                isCreated = true;                
+            }
+            else
+            {
+                Console.WriteLine("Отправная и конечная точки не могут быть одинаковы. Повторите запрос!");             
+            }
         }
-        else
-        {
-            Console.WriteLine("Отправная и конечная точки не могут быть одинаковы. Повторите запрос!");
-        }
+
+        return direction;
+    }
+
+    private void CreateTrain()
+    {
+        Direction direction = CreateDirection();
+        List <RailwayWagon> railwayWagons = new List<RailwayWagon>();
+        Train train = new Train(direction, railwayWagons);
+        PassengerBoarding(train);
+
+        Console.WriteLine("Поезд отправлен.");
+        Console.ReadKey();
+        Console.Clear();
     }
 
     private void PassengerBoarding(Train train)
@@ -86,14 +103,10 @@ class TrainPlanner
             RailwayWagon railwayWagon = new RailwayWagon();
             railwayWagon.TakeSeats(passengers);
             train.AddWagon(railwayWagon);
-            passengers -=railwayWagon.PassengersNumber;            
+            passengers -= railwayWagon.PassengersNumber;
         }
 
         train.ShowWagons();
-
-        Console.WriteLine("Поезд отправлен.");
-        Console.ReadKey();
-        Console.Clear();
     }
 }
 
@@ -116,10 +129,13 @@ class Direction
 
 class Train
 {
-    private List<RailwayWagon> _railwayWagons = new List<RailwayWagon>();
-    public Train()
+    private List<RailwayWagon> _railwayWagons;
+    private Direction _direction;
+    
+    public Train(Direction direction, List<RailwayWagon> railwayWagons)
     {
-        _railwayWagons = new List<RailwayWagon>();
+        _railwayWagons = railwayWagons;
+        _direction = direction;
     }
 
     public void ShowWagons()
@@ -133,13 +149,14 @@ class Train
     public void AddWagon(RailwayWagon railwayWagon)
     {
         _railwayWagons.Add(railwayWagon);
-    }
+    } 
 }
 
 class RailwayWagon
 {
     private int _minCapacity = 12;
     private int _maxCapacity = 54;
+
     public RailwayWagon()
     {
         Capacity = NumberRandomizer.GenerateRandomNumber(_minCapacity, _maxCapacity);
