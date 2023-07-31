@@ -18,7 +18,6 @@ class Arena
     private List<Fighter> _fighters = new List<Fighter>();
     private Fighter _fighter1;
     private Fighter _fighter2;
-    private Fighter _tempFighter;
 
     public Arena()
     {
