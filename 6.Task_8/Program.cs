@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 internal class Program
 {
@@ -44,7 +45,7 @@ class Arena
          new Archer("Archer", 80, 15, 2),
          new Mage("Mage", 60, 20, 1, 100),
          new Vampire("Vampire", 120, 8, 8),
-         new Thief("Thief", 70, 12, 3)
+         new Thief("Thief", 70, 12, 3),
         };
     }
 
@@ -109,12 +110,6 @@ class Arena
 
 abstract class Fighter
 {
-    public string Name { get; protected set; }
-    public int Health { get; protected set; }
-    public int AttackPower { get; protected set; }
-    public int Armor { get; protected set; }
-    public bool IsAlive { get; protected set; } = true;
-
     public Fighter(string name, int health, int attackPower, int armor)
     {
         Name = name;
@@ -122,6 +117,12 @@ abstract class Fighter
         AttackPower = attackPower;
         Armor = armor;
     }
+
+    public string Name { get; protected set; }
+    public int Health { get; protected set; }
+    public int AttackPower { get; protected set; }
+    public int Armor { get; protected set; }
+    public bool IsAlive { get; protected set; } = true;
 
     public abstract void Attack(Fighter enemy);
 
@@ -143,15 +144,12 @@ abstract class Fighter
 
 class Warrior : Fighter
 {
-    private int attackCount = 0;
-
     public Warrior(string name, int health, int attackPower, int armor) : base(name, health, attackPower, armor)
     {
     }
 
     public override void Attack(Fighter enemy)
     {
-        attackCount++;
         int damage = AttackPower;
         int DamageMultiplier = 5;
 
@@ -164,29 +162,18 @@ class Warrior : Fighter
         Console.WriteLine($"{Name} наносит {enemy.Name} критический удар - {damage} урона. У {enemy.Name} осталось {enemy.Health} здоровья");
     }
 
-    public bool GetCriticalDamage()
+    private bool GetCriticalDamage()
     {
-        Random randomCritChance = new Random();
         int minRandomValue = 1;
         int maxRandomValue = 5;
         int rageTreshold = 3;
 
-
-        if (randomCritChance.Next(minRandomValue, maxRandomValue) > rageTreshold)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return (UserUtils.GenerateRandomNumber(minRandomValue, maxRandomValue) > rageTreshold);
     }
 }
 
 class Archer : Fighter
 {
-    private Random random = new Random();
-
     public Archer(string name, int health, int attackPower, int armor) : base(name, health, attackPower, armor)
     {
     }
@@ -198,7 +185,7 @@ class Archer : Fighter
         int manRandomValue = 101;
         int agilityTreshold = 30;
 
-        if (random.Next(minRandomValue, manRandomValue) <= agilityTreshold)
+        if (UserUtils.GenerateRandomNumber(minRandomValue, manRandomValue) <= agilityTreshold)
         {
             Console.WriteLine($"{Name} увернулся от атаки {enemy.Name}!");
         }
@@ -223,20 +210,20 @@ class Mage : Fighter
     {
         int damageMultiplier = 2;
         int spellFireballCost = 50;
+        int damage = AttackPower;
 
         if (_mana >= spellFireballCost)
         {
-            int damage = AttackPower * damageMultiplier;
-            enemy.TakeDamage(damage);
+            damage = AttackPower * damageMultiplier;
             Console.WriteLine($"{Name} использовал огненный шар против {enemy.Name} и нанес {damage} урона.");
             _mana -= spellFireballCost;
         }
         else
-        {
-            int damage = AttackPower;
-            enemy.TakeDamage(damage);
+        {            
             Console.WriteLine($"{Name} атаковал {enemy.Name} и нанес {damage} урона.");
         }
+
+        enemy.TakeDamage(damage);
     }
 
     public override void ShowFighterInfo()
@@ -264,9 +251,7 @@ class Vampire : Fighter
 }
 
 class Thief : Fighter
-{
-    private Random random = new Random();
-
+{   
     public Thief(string name, int health, int attackPower, int armor) : base(name, health, attackPower, armor)
     {
     }
@@ -280,12 +265,12 @@ class Thief : Fighter
         int minRandomValue = 1;
         int maxRandomValue = 101;
 
-        if (random.Next(minRandomValue, maxRandomValue) >= RageTreshold)
+        if (UserUtils.GenerateRandomNumber(minRandomValue, maxRandomValue) >= RageTreshold)
         {
             Console.WriteLine($"{Name} метнул кинжал в {enemy.Name}!");
             damage = AttackPower + damageMultiplier;
 
-            if (random.Next(minRandomValue, maxRandomValue) >= hitThreshold)
+            if (UserUtils.GenerateRandomNumber(minRandomValue, maxRandomValue) >= hitThreshold)
             {
                 Console.WriteLine($"{Name} попал и нанёс {damage} урона!");
             }
@@ -299,5 +284,15 @@ class Thief : Fighter
             enemy.TakeDamage(damage);
             Console.WriteLine($"{Name} атаковал {enemy.Name} и нанес {damage} урона.");
         }
+    }
+}
+
+class UserUtils
+{
+    private static Random s_random = new Random();
+
+    public static int GenerateRandomNumber(int min, int max)
+    {
+        return s_random.Next(min, max);
     }
 }
