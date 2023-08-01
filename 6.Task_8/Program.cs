@@ -25,7 +25,7 @@ class Arena
         CreateFightersList();
     }
 
-    public void ShowFightersInfo()
+    public void ShowFightersInformation()
     {
         int i = 0;
 
@@ -33,7 +33,7 @@ class Arena
         {
             i++;
             Console.Write($"{i} ");
-            fighter.ShowFighterInfo();
+            fighter.ShowFighterInformation();
         }
     }
 
@@ -53,7 +53,7 @@ class Arena
     {
         Console.WriteLine("Доступные бойцы:");
 
-        ShowFightersInfo();
+        ShowFightersInformation();
 
         Console.WriteLine("Выберите двух бойцов для сражения (введите номера):");
 
@@ -136,7 +136,7 @@ abstract class Fighter
         }
     }
 
-    public virtual void ShowFighterInfo()
+    public virtual void ShowFighterInformation()
     {
         Console.WriteLine($"{Name}:\n Health:{Health}\n Armor:{Armor}\n Attack Power:{AttackPower}\n");
     }
@@ -226,7 +226,7 @@ class Mage : Fighter
         enemy.TakeDamage(damage);
     }
 
-    public override void ShowFighterInfo()
+    public override void ShowFighterInformation()
     {
         Console.WriteLine($"{Name}:\n Health:{Health}\n Armor:{Armor}\n Attack Power:{AttackPower}\n Mana:{_mana}\n");
     }
