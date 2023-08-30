@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using System.Xml.Linq;
 using static System.Net.Mime.MediaTypeNames;
 
 internal class Program
@@ -19,6 +20,7 @@ class Arena
     private List<Fighter> _fighters = new List<Fighter>();
     private Fighter _fighter1;
     private Fighter _fighter2;
+    private Fighter _tempFighter;
 
     public Arena()
     {
@@ -86,8 +88,7 @@ class Arena
 
     private Fighter ChoiceFighter()
     {
-        CreateFightersList();
-
+        Fighter tempFighter = null;
         Fighter fighter = null;
 
         while (fighter == null)
@@ -97,6 +98,7 @@ class Arena
             if (index > 0 && index <= _fighters.Count)
             {
                 fighter = _fighters.ElementAt(index - 1);
+                tempFighter = fighter.Clone();
             }
             else
             {
@@ -104,7 +106,7 @@ class Arena
             }
         }
 
-        return fighter;
+        return tempFighter;
     }
 }
 
@@ -122,24 +124,21 @@ abstract class Fighter
     public int Health { get; protected set; }
     public int AttackPower { get; protected set; }
     public int Armor { get; protected set; }
-    public bool IsAlive { get; protected set; } = true;
+    public bool IsAlive => Health > 0;
 
     public abstract void Attack(Fighter enemy);
 
     public void TakeDamage(int damage)
     {
         Health -= (damage - Armor);
-        
-        if (Health <= 0)
-        {
-            IsAlive = false;
-        }
     }
 
     public virtual void ShowFighterInformation()
     {
         Console.WriteLine($"{Name}:\n Health:{Health}\n Armor:{Armor}\n Attack Power:{AttackPower}\n");
     }
+
+    public abstract Fighter Clone();
 }
 
 class Warrior : Fighter
@@ -160,6 +159,11 @@ class Warrior : Fighter
 
         enemy.TakeDamage(damage);
         Console.WriteLine($"{Name} наносит {enemy.Name} критический удар - {damage} урона. У {enemy.Name} осталось {enemy.Health} здоровья");
+    }
+
+    public override Fighter Clone()
+    {
+        return new Warrior(Name,Health,AttackPower,Armor);
     }
 
     private bool GetCriticalDamage()
@@ -195,6 +199,11 @@ class Archer : Fighter
             Console.WriteLine($"{Name} атаковал {enemy.Name} и нанес {damage} урона.");
         }
     }
+
+    public override Fighter Clone()
+    {
+        return new Archer(Name,Health,AttackPower,Armor);
+    }
 }
 
 class Mage : Fighter
@@ -226,6 +235,11 @@ class Mage : Fighter
         enemy.TakeDamage(damage);
     }
 
+    public override Fighter Clone()
+    {
+        return new Mage(Name,Health,AttackPower,Armor,_mana);
+    }
+
     public override void ShowFighterInformation()
     {
         Console.WriteLine($"{Name}:\n Health:{Health}\n Armor:{Armor}\n Attack Power:{AttackPower}\n Mana:{_mana}\n");
@@ -248,6 +262,11 @@ class Vampire : Fighter
         Health += healing;
         Console.WriteLine($"{Name} атаковал {enemy.Name}, нанеся {damage} урона и исцелив себя на {healing} единиц здоровья.");
     }
+
+    public override Fighter Clone()
+    {
+        return new Vampire(Name, Health, AttackPower, Armor);
+    }
 }
 
 class Thief : Fighter
@@ -260,12 +279,12 @@ class Thief : Fighter
     {
         int damage = AttackPower;
         int damageMultiplier = 10;
-        int RageTreshold = 35;
+        int rageTreshold = 35;
         int hitThreshold = 28;
         int minRandomValue = 1;
         int maxRandomValue = 101;
 
-        if (UserUtils.GenerateRandomNumber(minRandomValue, maxRandomValue) >= RageTreshold)
+        if (UserUtils.GenerateRandomNumber(minRandomValue, maxRandomValue) >= rageTreshold)
         {
             Console.WriteLine($"{Name} метнул кинжал в {enemy.Name}!");
             damage = AttackPower + damageMultiplier;
@@ -285,14 +304,19 @@ class Thief : Fighter
             Console.WriteLine($"{Name} атаковал {enemy.Name} и нанес {damage} урона.");
         }
     }
+
+    public override Fighter Clone()
+    {
+        return new Thief(Name,Health,AttackPower,Armor);
+    }
 }
 
 class UserUtils
 {
-    private static Random s_random = new Random();
+    private static Random random = new Random();
 
     public static int GenerateRandomNumber(int min, int max)
     {
-        return s_random.Next(min, max);
+        return random.Next(min, max);
     }
 }
