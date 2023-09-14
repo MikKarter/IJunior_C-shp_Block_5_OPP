@@ -1,0 +1,8 @@
+C:\Users\local\Source\Repos\MikKarter\IJunior_C-shp_Block_6_OPP\6.Task_9\bin\Debug\6.Task_8.exe.config
+C:\Users\local\Source\Repos\MikKarter\IJunior_C-shp_Block_6_OPP\6.Task_9\bin\Debug\6.Task_8.exe
+C:\Users\local\Source\Repos\MikKarter\IJunior_C-shp_Block_6_OPP\6.Task_9\bin\Debug\6.Task_8.pdb
+C:\Users\local\Source\Repos\MikKarter\IJunior_C-shp_Block_6_OPP\6.Task_9\obj\Debug\6.Task_9.csproj.AssemblyReference.cache
+C:\Users\local\Source\Repos\MikKarter\IJunior_C-shp_Block_6_OPP\6.Task_9\obj\Debug\6.Task_9.csproj.SuggestedBindingRedirects.cache
+C:\Users\local\Source\Repos\MikKarter\IJunior_C-shp_Block_6_OPP\6.Task_9\obj\Debug\6.Task_9.csproj.CoreCompileInputs.cache
+C:\Users\local\Source\Repos\MikKarter\IJunior_C-shp_Block_6_OPP\6.Task_9\obj\Debug\6.Task_8.exe
+C:\Users\local\Source\Repos\MikKarter\IJunior_C-shp_Block_6_OPP\6.Task_9\obj\Debug\6.Task_8.pdb
