@@ -1,0 +1,15 @@
+D:\Unity\Learning_iJunior\ОПП\6.Task_9\obj\Debug\net7.0\6.Task_9.csproj.AssemblyReference.cache
+D:\Unity\Learning_iJunior\ОПП\6.Task_9\obj\Debug\net7.0\6.Task_9.GeneratedMSBuildEditorConfig.editorconfig
+D:\Unity\Learning_iJunior\ОПП\6.Task_9\obj\Debug\net7.0\6.Task_9.AssemblyInfoInputs.cache
+D:\Unity\Learning_iJunior\ОПП\6.Task_9\obj\Debug\net7.0\6.Task_9.AssemblyInfo.cs
+D:\Unity\Learning_iJunior\ОПП\6.Task_9\obj\Debug\net7.0\6.Task_9.csproj.CoreCompileInputs.cache
+D:\Unity\Learning_iJunior\ОПП\6.Task_9\bin\Debug\net7.0\6.Task_9.exe
+D:\Unity\Learning_iJunior\ОПП\6.Task_9\bin\Debug\net7.0\6.Task_9.deps.json
+D:\Unity\Learning_iJunior\ОПП\6.Task_9\bin\Debug\net7.0\6.Task_9.runtimeconfig.json
+D:\Unity\Learning_iJunior\ОПП\6.Task_9\bin\Debug\net7.0\6.Task_9.dll
+D:\Unity\Learning_iJunior\ОПП\6.Task_9\bin\Debug\net7.0\6.Task_9.pdb
+D:\Unity\Learning_iJunior\ОПП\6.Task_9\obj\Debug\net7.0\6.Task_9.dll
+D:\Unity\Learning_iJunior\ОПП\6.Task_9\obj\Debug\net7.0\refint\6.Task_9.dll
+D:\Unity\Learning_iJunior\ОПП\6.Task_9\obj\Debug\net7.0\6.Task_9.pdb
+D:\Unity\Learning_iJunior\ОПП\6.Task_9\obj\Debug\net7.0\6.Task_9.genruntimeconfig.cache
+D:\Unity\Learning_iJunior\ОПП\6.Task_9\obj\Debug\net7.0\ref\6.Task_9.dll
