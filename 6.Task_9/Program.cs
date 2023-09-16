@@ -23,7 +23,7 @@ class SuperMarket
         for (int i = 0; i < UserUtils.GenerateRandomNumber(_minQueueCount, _maxQueueCount); i++)
         {
             _queue.Enqueue(new Buyer());
-        }        
+        }
     }
 
     public int GetCount()
@@ -56,7 +56,7 @@ class SuperMarket
         while (isFinished == false)
         {
             buyer.AddProduct(TakeProduct());
-            Console.WriteLine("Хотите взять что то ещё? \n1 - Да, 2 - Нет.");
+            Console.WriteLine($"Хотите взять что то ещё? \n{Yes} - Да, {No} - Нет.");
             int.TryParse(Console.ReadLine(), out int input);
 
             switch (input)
@@ -147,15 +147,13 @@ class ShowCase
 
 class Buyer
 {
-    private List<Product> _purchasedProducts;
-    private List<Product> _buyerCart = new List<Product>();
+    private List<Product> _cart = new List<Product>();
     private int _minMoney = 10;
     private int _maxMoney = 500;
 
     public Buyer()
     {
         Money = UserUtils.GenerateRandomNumber(_minMoney, _maxMoney);
-        _purchasedProducts = new List<Product>();
     }
 
     public int Money { get; private set; }
@@ -164,7 +162,7 @@ class Buyer
     {
         int sum = 0;
 
-        foreach (Product product in _buyerCart)
+        foreach (Product product in _cart)
         {
             sum += product.Cost;
         }
@@ -174,27 +172,24 @@ class Buyer
 
     public void Pay(int sum)
     {
-        if (Money >= sum)
-        {
-            Money -= sum;
-        }
+        Money -= sum;
     }
 
     public Product ChooseProduct()
     {
-        int i = UserUtils.GenerateRandomNumber(0, _buyerCart.Count);
-        Product product = _buyerCart[i];
+        int i = UserUtils.GenerateRandomNumber(0, _cart.Count);
+        Product product = _cart[i];
         return product;
     }
 
     public void DropProduct(Product product)
     {
-        _buyerCart.Remove(product);
+        _cart.Remove(product);
     }
 
     public void AddProduct(Product product)
     {
-        _buyerCart.Add(product);
+        _cart.Add(product);
     }
 }
 
@@ -212,10 +207,10 @@ class Product
 
 class UserUtils
 {
-    private static Random random = new Random();
+    private static Random s_random = new Random();
 
     public static int GenerateRandomNumber(int min, int max)
     {
-        return random.Next(min, max);
+        return s_random.Next(min, max);
     }
 }
