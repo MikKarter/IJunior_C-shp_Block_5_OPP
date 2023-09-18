@@ -1,10 +1,5 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace _6.Task_11
 {
@@ -136,7 +131,6 @@ namespace _6.Task_11
 
         public void SkipTime()
         {
-
             Console.WriteLine("спустя немного времени...");
 
             foreach (Fish fish in _fishs)
@@ -156,8 +150,6 @@ namespace _6.Task_11
 
             ShowInfo();
             Console.WriteLine("------------------------------------------------------------");
-
-
         }
 
         public void ShowFishList()
@@ -201,7 +193,10 @@ namespace _6.Task_11
             Console.WriteLine($"Рыбка {Species}, возраст - {Age}");
         }
 
-        public abstract void ShowSpecies();
+        public void ShowSpecies()
+        {
+            Console.WriteLine($"Эта рыбка породы {Species}.");
+        }
     }
 
     class Angelfish : Fish
@@ -214,11 +209,6 @@ namespace _6.Task_11
             Species = "Скалярия";
             Age = CreateAge();
             MaxAge = (float)UserUtils.GenerateRandomIntNumber(_min, _max);
-        }
-
-        public override void ShowSpecies()
-        {
-            Console.WriteLine($"Эта рыбка породы {Species}.");
         }
     }
 
@@ -233,11 +223,6 @@ namespace _6.Task_11
             Age = CreateAge();
             MaxAge = (float)UserUtils.GenerateRandomIntNumber(_min, _max);
         }
-
-        public override void ShowSpecies()
-        {
-            Console.WriteLine($"Эта рыбка породы {Species}.");
-        }
     }
 
     class Clownfish : Fish
@@ -250,11 +235,6 @@ namespace _6.Task_11
             Species = "Рыба-клоун";
             Age = CreateAge();
             MaxAge = (float)UserUtils.GenerateRandomIntNumber(_min, _max);
-        }
-
-        public override void ShowSpecies()
-        {
-            Console.WriteLine($"Эта рыбка породы {Species}.");
         }
     }
 
@@ -269,11 +249,6 @@ namespace _6.Task_11
             Age = CreateAge();
             MaxAge = (float)UserUtils.GenerateRandomIntNumber(_min, _max);
         }
-
-        public override void ShowSpecies()
-        {
-            Console.WriteLine($"Эта рыбка породы {Species}.");
-        }
     }
 
     class Barbus : Fish
@@ -286,11 +261,6 @@ namespace _6.Task_11
             Species = "Барбус";
             Age = CreateAge();
             MaxAge = (float)UserUtils.GenerateRandomIntNumber(_min, _max);
-        }
-
-        public override void ShowSpecies()
-        {
-            Console.WriteLine($"Эта рыбка породы {Species}.");
         }
     }
 
@@ -309,9 +279,4 @@ namespace _6.Task_11
             return (int)randomInt.Next(min, max);
         }
     }
-
-
-
-
-
 }
