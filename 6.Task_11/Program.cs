@@ -21,14 +21,14 @@ namespace _6.Task_11
         private const int Exit = 5;
 
         private Aquarium _aquarium = new Aquarium();
-        private bool isWorking = true;
+        private bool _isWorking = true;
 
         public Room()
         {
             _aquarium = new Aquarium();
         }
 
-        private void AquariumManagement(int number)
+        private void ManagementAquarium(int number)
         {
             switch (number)
             {
@@ -45,7 +45,7 @@ namespace _6.Task_11
                     _aquarium.ShowInfo();
                     break;
                 case Exit:
-                    StoppedSimulation(ref isWorking);
+                    _isWorking = false;
                     break;
                 default:
                     Console.WriteLine("Такой команды не существует, выберите повторно");
@@ -57,7 +57,7 @@ namespace _6.Task_11
         {
             Console.WriteLine("Добро пожаловать в симуляцию аквариума");
 
-            while (isWorking == true)
+            while (_isWorking == true)
             {
                 Console.WriteLine("Вам доступны следующие действия:");
                 Console.WriteLine($"{AddFish} - добавить рыбу");
@@ -66,13 +66,8 @@ namespace _6.Task_11
                 Console.WriteLine($"{ShowInfo} - Проверить аквариум");
                 Console.WriteLine($"{Exit} - Остановить симуляцию");
                 int.TryParse(Console.ReadLine(), out int number);
-                AquariumManagement(number);
+                ManagementAquarium(number);
             }
-        }
-
-        private void StoppedSimulation(ref bool isWoking)
-        {
-            isWoking = false;
         }
     }
 
@@ -80,22 +75,22 @@ namespace _6.Task_11
     {
         private int _maxCountFish = 5;
         private List<Fish> _fishs;
-        private List<Fish> _fishList;
+        private List<Fish> _templates;
 
         public Aquarium()
         {
             _fishs = new List<Fish>(_maxCountFish);
-            _fishList = new List<Fish>();
-            _fishList.Add(new Angelfish());
-            _fishList.Add(new Cockerel());
-            _fishList.Add(new Clownfish());
-            _fishList.Add(new Guppy());
-            _fishList.Add(new Barbus());
+            _templates = new List<Fish>();
+            _templates.Add(new Angelfish());
+            _templates.Add(new Cockerel());
+            _templates.Add(new Clownfish());
+            _templates.Add(new Guppy());
+            _templates.Add(new Barbus());
         }
 
         public void ShowInfo()
         {
-            int tempNumber = _fishList.Count;
+            int tempNumber = _templates.Count;
 
             if (_fishs.Count == 0)
             {
@@ -105,10 +100,11 @@ namespace _6.Task_11
             {
                 Console.WriteLine($"Сейчас в вашем аквариуме {_fishs.Count} рыб:");
 
-                for (int i = _fishs.Count-1; i >= 0; i--)
+                for (int i = _fishs.Count - 1; i >= 0; i--)
                 {
-                    Console.Write(i+1 + ". ");
+                    Console.Write(i + 1 + ". ");
                     _fishs[i].ShowInfo();
+                    _fishs[i].ShowDead();
                 }
             }
         }
@@ -118,7 +114,16 @@ namespace _6.Task_11
             ShowFishList();
             Console.WriteLine("Выберите рыбку чтобы поместить её в аквариум");
             int.TryParse(Console.ReadLine(), out int numberForAdd);
-            _fishs.Add(_fishList[numberForAdd - 1]);
+
+            if (_templates.Count >= numberForAdd && numberForAdd > 0)
+            {
+                _fishs.Add(_templates[numberForAdd - 1]);
+            }
+            else
+            {
+                Console.WriteLine("Такой рыбки не существует");
+            }
+
         }
 
         public void RemoveFish()
@@ -126,7 +131,16 @@ namespace _6.Task_11
             ShowInfo();
             Console.WriteLine("Выберите рыбку чтобы удалить её из аквариума");
             int.TryParse(Console.ReadLine(), out int numberForRemove);
-            _fishs.Remove(_fishs[numberForRemove-1]);
+
+
+            if (_fishs.Count >= numberForRemove && numberForRemove > 0)
+            {
+                _fishs.Remove(_fishs[numberForRemove - 1]);
+            }
+            else
+            {
+                Console.WriteLine("Такой рыбки не существует");
+            }
         }
 
         public void SkipTime()
@@ -142,7 +156,7 @@ namespace _6.Task_11
             {
                 if (_fishs[i].IsAlive == false)
                 {
-                    Console.WriteLine($"Рыбка {_fishs[i].Species} умерла");
+                    _fishs[i].ShowDead();
                 }
 
                 _fishs.Remove(_fishs[i]);
@@ -156,10 +170,10 @@ namespace _6.Task_11
         {
             Console.WriteLine("Для выбора доступны:");
 
-            for (int i = 0; i < _fishList.Count; i++)
+            for (int i = 0; i < _templates.Count; i++)
             {
                 Console.Write(i + 1 + ". ");
-                _fishList[i].ShowSpecies();
+                _templates[i].ShowSpecies();
             }
         }
     }
@@ -168,7 +182,6 @@ namespace _6.Task_11
     {
         protected float Age;
         protected float MaxAge;
-        public bool IsAlive => Age > MaxAge;
 
         public Fish()
         {
@@ -176,6 +189,7 @@ namespace _6.Task_11
         }
 
         public string Species { get; protected set; }
+        public bool IsAlive => Age > MaxAge;
 
         public void AddAge(float age)
         {
@@ -196,6 +210,11 @@ namespace _6.Task_11
         public void ShowSpecies()
         {
             Console.WriteLine($"Эта рыбка породы {Species}.");
+        }
+
+        public void ShowDead()
+        {
+                Console.WriteLine($"{Species} мертва");
         }
     }
 
