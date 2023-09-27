@@ -28,6 +28,23 @@ namespace _6.Task_11
             _aquarium = new Aquarium();
         }
 
+        public void SimulationLive()
+        {
+            Console.WriteLine("Добро пожаловать в симуляцию аквариума");
+
+            while (_isWorking == true)
+            {
+                Console.WriteLine("Вам доступны следующие действия:");
+                Console.WriteLine($"{AddFish} - добавить рыбу");
+                Console.WriteLine($"{RemoveFish} - удалить рыбу из аквариума");
+                Console.WriteLine($"{SkipTime} - Пропустить немного времени");
+                Console.WriteLine($"{ShowInfo} - Проверить аквариум");
+                Console.WriteLine($"{Exit} - Остановить симуляцию");
+                int.TryParse(Console.ReadLine(), out int number);
+                ManagementAquarium(number);
+            }
+        }
+
         private void ManagementAquarium(int number)
         {
             switch (number)
@@ -52,23 +69,6 @@ namespace _6.Task_11
                     break;
             }
         }
-
-        public void SimulationLive()
-        {
-            Console.WriteLine("Добро пожаловать в симуляцию аквариума");
-
-            while (_isWorking == true)
-            {
-                Console.WriteLine("Вам доступны следующие действия:");
-                Console.WriteLine($"{AddFish} - добавить рыбу");
-                Console.WriteLine($"{RemoveFish} - удалить рыбу из аквариума");
-                Console.WriteLine($"{SkipTime} - Пропустить немного времени");
-                Console.WriteLine($"{ShowInfo} - Проверить аквариум");
-                Console.WriteLine($"{Exit} - Остановить симуляцию");
-                int.TryParse(Console.ReadLine(), out int number);
-                ManagementAquarium(number);
-            }
-        }
     }
 
     class Aquarium
@@ -90,8 +90,6 @@ namespace _6.Task_11
 
         public void ShowInfo()
         {
-            int tempNumber = _templates.Count;
-
             if (_fishs.Count == 0)
             {
                 Console.WriteLine("Сейчас в вашем аквариуме пусто!");
@@ -189,7 +187,7 @@ namespace _6.Task_11
         }
 
         public string Species { get; protected set; }
-        public bool IsAlive => Age > MaxAge;
+        public bool IsAlive => Age <= MaxAge;
 
         public void AddAge(float age)
         {
@@ -285,17 +283,16 @@ namespace _6.Task_11
 
     class UserUtils
     {
-        private static Random randomFloat = new Random();
-        private static Random randomInt = new Random();
+        private static Random s_random = new Random();        
 
         public static float GenerateRandomFloatNumber()
         {
-            return (float)randomFloat.NextDouble();
+            return (float)s_random.NextDouble();
         }
 
         public static int GenerateRandomIntNumber(int min, int max)
         {
-            return (int)randomInt.Next(min, max);
+            return (int)s_random.Next(min, max);
         }
     }
 }
