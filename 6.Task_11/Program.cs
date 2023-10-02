@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace _6.Task_11
 {
@@ -75,17 +76,18 @@ namespace _6.Task_11
     {
         private int _maxCountFish = 5;
         private List<Fish> _fishs;
-        private List<Fish> _templates;
+        private List<Fish> _baseFishes;
+        private Fish _tepmFish;
 
         public Aquarium()
         {
             _fishs = new List<Fish>(_maxCountFish);
-            _templates = new List<Fish>();
-            _templates.Add(new Angelfish());
-            _templates.Add(new Cockerel());
-            _templates.Add(new Clownfish());
-            _templates.Add(new Guppy());
-            _templates.Add(new Barbus());
+            _baseFishes = new List<Fish>();
+            _baseFishes.Add(new Angelfish());
+            _baseFishes.Add(new Cockerel());
+            _baseFishes.Add(new Clownfish());
+            _baseFishes.Add(new Guppy());
+            _baseFishes.Add(new Barbus());
         }
 
         public void ShowInfo()
@@ -101,8 +103,7 @@ namespace _6.Task_11
                 for (int i = _fishs.Count - 1; i >= 0; i--)
                 {
                     Console.Write(i + 1 + ". ");
-                    _fishs[i].ShowInfo();
-                    _fishs[i].ShowDead();
+                    _fishs[i].ShowInfo();                    
                 }
             }
         }
@@ -113,15 +114,15 @@ namespace _6.Task_11
             Console.WriteLine("Выберите рыбку чтобы поместить её в аквариум");
             int.TryParse(Console.ReadLine(), out int numberForAdd);
 
-            if (_templates.Count >= numberForAdd && numberForAdd > 0)
-            {
-                _fishs.Add(_templates[numberForAdd - 1]);
+            if (_baseFishes.Count >= numberForAdd && numberForAdd > 0)
+            {                
+                _tepmFish = _baseFishes.ElementAt(numberForAdd - 1);
+                _fishs.Add(_tepmFish.Clone());
             }
             else
             {
                 Console.WriteLine("Такой рыбки не существует");
             }
-
         }
 
         public void RemoveFish()
@@ -129,7 +130,6 @@ namespace _6.Task_11
             ShowInfo();
             Console.WriteLine("Выберите рыбку чтобы удалить её из аквариума");
             int.TryParse(Console.ReadLine(), out int numberForRemove);
-
 
             if (_fishs.Count >= numberForRemove && numberForRemove > 0)
             {
@@ -155,10 +155,9 @@ namespace _6.Task_11
                 if (_fishs[i].IsAlive == false)
                 {
                     _fishs[i].ShowDead();
+                    RemoveDead(_fishs[i]);
                 }
-
-                _fishs.Remove(_fishs[i]);
-            }
+            }                
 
             ShowInfo();
             Console.WriteLine("------------------------------------------------------------");
@@ -168,11 +167,16 @@ namespace _6.Task_11
         {
             Console.WriteLine("Для выбора доступны:");
 
-            for (int i = 0; i < _templates.Count; i++)
+            for (int i = 0; i < _baseFishes.Count; i++)
             {
                 Console.Write(i + 1 + ". ");
-                _templates[i].ShowSpecies();
+                _baseFishes[i].ShowSpecies();
             }
+        }
+
+        private void RemoveDead(Fish fish)
+        {
+            _fishs.Remove(fish);
         }
     }
 
@@ -183,7 +187,7 @@ namespace _6.Task_11
 
         public Fish()
         {
-            Age = 0.0f;
+            Age = CreateAge();
         }
 
         public string Species { get; protected set; }
@@ -194,10 +198,11 @@ namespace _6.Task_11
             Age += age;
         }
 
+        public abstract Fish Clone();
+
         protected float CreateAge()
         {
-            Age += UserUtils.GenerateRandomFloatNumber();
-            return Age;
+            return UserUtils.GenerateRandomFloatNumber();            
         }
 
         public void ShowInfo()
@@ -224,8 +229,12 @@ namespace _6.Task_11
         public Angelfish() : base()
         {
             Species = "Скалярия";
-            Age = CreateAge();
             MaxAge = (float)UserUtils.GenerateRandomIntNumber(_min, _max);
+        }
+
+        public override Fish Clone()
+        {
+            return new Angelfish();
         }
     }
 
@@ -236,9 +245,13 @@ namespace _6.Task_11
 
         public Cockerel() : base()
         {
-            Species = "Петушок";
-            Age = CreateAge();
+            Species = "Петушок";            
             MaxAge = (float)UserUtils.GenerateRandomIntNumber(_min, _max);
+        }
+
+        public override Fish Clone()
+        {
+            return new Cockerel();
         }
     }
 
@@ -249,9 +262,13 @@ namespace _6.Task_11
 
         public Clownfish() : base()
         {
-            Species = "Рыба-клоун";
-            Age = CreateAge();
+            Species = "Рыба-клоун";            
             MaxAge = (float)UserUtils.GenerateRandomIntNumber(_min, _max);
+        }
+
+        public override Fish Clone()
+        {
+            return new Clownfish();
         }
     }
 
@@ -262,9 +279,13 @@ namespace _6.Task_11
 
         public Guppy() : base()
         {
-            Species = "Гуппи";
-            Age = CreateAge();
+            Species = "Гуппи";            
             MaxAge = (float)UserUtils.GenerateRandomIntNumber(_min, _max);
+        }
+
+        public override Fish Clone()
+        {
+            return new Guppy();
         }
     }
 
@@ -276,8 +297,12 @@ namespace _6.Task_11
         public Barbus() : base()
         {
             Species = "Барбус";
-            Age = CreateAge();
             MaxAge = (float)UserUtils.GenerateRandomIntNumber(_min, _max);
+        }
+
+        public override Fish Clone()
+        {
+            return new Barbus();
         }
     }
 
