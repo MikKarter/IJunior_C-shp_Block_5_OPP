@@ -76,8 +76,7 @@ namespace _6.Task_11
     {
         private int _maxCountFish = 5;
         private List<Fish> _fishs;
-        private List<Fish> _baseFishes;
-        private Fish _tepmFish;
+        private List<Fish> _baseFishes;        
 
         public Aquarium()
         {
@@ -110,14 +109,16 @@ namespace _6.Task_11
 
         public void AddFish()
         {
+            Fish tempFish;
+
             ShowFishList();
             Console.WriteLine("Выберите рыбку чтобы поместить её в аквариум");
             int.TryParse(Console.ReadLine(), out int numberForAdd);
 
             if (_baseFishes.Count >= numberForAdd && numberForAdd > 0)
             {                
-                _tepmFish = _baseFishes.ElementAt(numberForAdd - 1);
-                _fishs.Add(_tepmFish.Clone());
+                tempFish = _baseFishes[numberForAdd - 1];
+                _fishs.Add(tempFish.Clone());
             }
             else
             {
@@ -150,18 +151,11 @@ namespace _6.Task_11
                 fish.AddAge(UserUtils.GenerateRandomFloatNumber());
             }
 
-            for (int i = _fishs.Count - 1; i >= 0; i--)
-            {
-                if (_fishs[i].IsAlive == false)
-                {
-                    _fishs[i].ShowDead();
-                    RemoveDead(_fishs[i]);
-                }
-            }                
-
+            RemoveDead();
             ShowInfo();
             Console.WriteLine("------------------------------------------------------------");
         }
+
 
         public void ShowFishList()
         {
@@ -174,9 +168,16 @@ namespace _6.Task_11
             }
         }
 
-        private void RemoveDead(Fish fish)
+        private void RemoveDead()
         {
-            _fishs.Remove(fish);
+            for (int i = _fishs.Count - 1; i >= 0; i--)
+            {
+                if (_fishs[i].IsAlive == false)
+                {
+                    _fishs[i].ShowDead();
+                    _fishs.Remove(_fishs[i]);
+                }
+            }
         }
     }
 
