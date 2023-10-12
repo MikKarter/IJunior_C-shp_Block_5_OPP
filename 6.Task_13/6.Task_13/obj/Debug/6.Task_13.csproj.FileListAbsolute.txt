@@ -1,0 +1,7 @@
+C:\Users\kalni\source\repos\6.Task_13\6.Task_13\bin\Debug\6.Task_13.exe.config
+C:\Users\kalni\source\repos\6.Task_13\6.Task_13\bin\Debug\6.Task_13.exe
+C:\Users\kalni\source\repos\6.Task_13\6.Task_13\bin\Debug\6.Task_13.pdb
+C:\Users\kalni\source\repos\6.Task_13\6.Task_13\obj\Debug\6.Task_13.csproj.AssemblyReference.cache
+C:\Users\kalni\source\repos\6.Task_13\6.Task_13\obj\Debug\6.Task_13.csproj.CoreCompileInputs.cache
+C:\Users\kalni\source\repos\6.Task_13\6.Task_13\obj\Debug\6.Task_13.exe
+C:\Users\kalni\source\repos\6.Task_13\6.Task_13\obj\Debug\6.Task_13.pdb
