@@ -9,7 +9,6 @@ namespace _6.Task_12
         {
             Zoo zoo = new Zoo();
             zoo.ManageZoo();
-
         }
     }
 
@@ -76,7 +75,6 @@ namespace _6.Task_12
 
     class Aviary
     {
-
         private List<Animal> _animals = new List<Animal>();
         private int _minCapacity = 1;
         private int _maxCapacity = 6;
@@ -159,8 +157,6 @@ namespace _6.Task_12
         public string Name { get; private set; }
         public string Voice { get; private set; }
     }
-
-
 
     class UserUtils
     {
