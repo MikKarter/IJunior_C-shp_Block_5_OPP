@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace _6.Task_12
@@ -9,6 +9,7 @@ namespace _6.Task_12
         {
             Zoo zoo = new Zoo();
             zoo.ManageZoo();
+
         }
     }
 
@@ -36,7 +37,7 @@ namespace _6.Task_12
 
         public void CalculateAviaryQuantity()
         {
-            _aviaryCount = UserUtils.GenerateRandomIntNumber(_minAviaryCount,_maxAviaryCount);
+            _aviaryCount = UserUtils.GenerateRandomIntNumber(_minAviaryCount, _maxAviaryCount);
         }
 
         public void ManageZoo()
@@ -63,7 +64,7 @@ namespace _6.Task_12
 
                 if (userInput <= _aviarys.Count & userInput > 0)
                 {
-                    ShowInfo(userInput-1);
+                    ShowInfo(userInput - 1);
                 }
                 else
                 {
@@ -76,13 +77,21 @@ namespace _6.Task_12
     class Aviary
     {
         private List<Animal> _animals = new List<Animal>();
-        private int _minCapacity = 1;
+        private List<Animal> _animalsList = new List<Animal>()
+        {
+            new Animal("Bear", "Rooar"),
+            new Animal("Dog", "Barking"),
+            new Animal("Wolf", "Howl"),
+            new Animal("Cow", "Moo"),
+        };
+
+        private int _minCapacity = 2;
         private int _maxCapacity = 6;
         private int _id;
 
         public Aviary()
-        {            
-            _id=UserUtils.CreateID();
+        {
+            _id = UserUtils.CreateID();
             FillTheAnimals(UserUtils.GenerateRandomIntNumber(_minCapacity, _maxCapacity));
         }
 
@@ -90,12 +99,12 @@ namespace _6.Task_12
 
         public void FillTheAnimals(int numberOfAnimals)
         {
-            int minValue = 1;
-            int maxValue = 5;
-
             for (int i = 0; i < numberOfAnimals; i++)
             {
-                _animals.Add(new Animal(UserUtils.GenerateRandomIntNumber(minValue, maxValue)));
+                Animal tempAnimal;
+                tempAnimal = _animalsList[UserUtils.GenerateRandomIntNumber(0, _animalsList.Count)].CLone();
+                tempAnimal.DefineGender();
+                _animals.Add(tempAnimal);
             }
         }
 
@@ -108,42 +117,26 @@ namespace _6.Task_12
                 Console.WriteLine($"{animal.Name}, voice: {animal.Voice}. Gender - {animal.Gender}");
             }
         }
-
     }
 
     class Animal
     {
-        private const int Bear = 1;
-        private const int Dog = 2;
-        private const int Wolf = 3;
-        private const int Cow = 4;
-
         private int _genredMale = 2;
         private int _genderFemale = 0;
 
-        public Animal(int id)
+        public Animal(string name, string voice)
         {
-            switch (id)
-            {
-                case Bear:
-                    Name = "Bear";
-                    Voice = "Rooar";
-                    break;
-                case Dog:
-                    Name = "Dog";
-                    Voice = "Barking";
-                    break;
-                case Wolf:
-                    Name = "Wolf";
-                    Voice = "Howl";
-                    break;
-                case Cow:
-                    Name = "Cow";
-                    Voice = "Moo";
-                    break;
-            }           
+            Name = name;
+            Voice = voice;
+        }
 
-            if (UserUtils.GenerateRandomIntNumber(_genderFemale,_genredMale) > 0 )
+        public string Gender { get; private set; }
+        public string Name { get; private set; }
+        public string Voice { get; private set; }
+
+        public void DefineGender()
+        {
+            if (UserUtils.GenerateRandomIntNumber(_genderFemale, _genredMale) > 0)
             {
                 Gender = "male";
             }
@@ -153,9 +146,10 @@ namespace _6.Task_12
             }
         }
 
-        public string Gender { get; private set; }
-        public string Name { get; private set; }
-        public string Voice { get; private set; }
+        public Animal CLone()
+        {
+            return new Animal(Name, Voice);
+        }
     }
 
     class UserUtils
