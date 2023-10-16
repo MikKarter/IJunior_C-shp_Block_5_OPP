@@ -13,3 +13,11 @@ C:\Users\kalni\Source\Repos\MikKarter\IJunior_C-shp_Block_6_OPP\6.Task_12\obj\De
 C:\Users\kalni\Source\Repos\MikKarter\IJunior_C-shp_Block_6_OPP\6.Task_12\obj\Debug\6.Task_12.csproj.CoreCompileInputs.cache
 C:\Users\kalni\Source\Repos\MikKarter\IJunior_C-shp_Block_6_OPP\6.Task_12\obj\Debug\6.Task_12.exe
 C:\Users\kalni\Source\Repos\MikKarter\IJunior_C-shp_Block_6_OPP\6.Task_12\obj\Debug\6.Task_12.pdb
+C:\Users\local\Source\Repos\MikKarter\IJunior_C-shp_Block_6_OPP\6.Task_12\bin\Debug\6.Task_12.exe.config
+C:\Users\local\Source\Repos\MikKarter\IJunior_C-shp_Block_6_OPP\6.Task_12\bin\Debug\6.Task_12.exe
+C:\Users\local\Source\Repos\MikKarter\IJunior_C-shp_Block_6_OPP\6.Task_12\bin\Debug\6.Task_12.pdb
+C:\Users\local\Source\Repos\MikKarter\IJunior_C-shp_Block_6_OPP\6.Task_12\obj\Debug\6.Task_12.csproj.AssemblyReference.cache
+C:\Users\local\Source\Repos\MikKarter\IJunior_C-shp_Block_6_OPP\6.Task_12\obj\Debug\6.Task_12.csproj.SuggestedBindingRedirects.cache
+C:\Users\local\Source\Repos\MikKarter\IJunior_C-shp_Block_6_OPP\6.Task_12\obj\Debug\6.Task_12.csproj.CoreCompileInputs.cache
+C:\Users\local\Source\Repos\MikKarter\IJunior_C-shp_Block_6_OPP\6.Task_12\obj\Debug\6.Task_12.exe
+C:\Users\local\Source\Repos\MikKarter\IJunior_C-shp_Block_6_OPP\6.Task_12\obj\Debug\6.Task_12.pdb

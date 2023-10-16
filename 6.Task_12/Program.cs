@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace _6.Task_12
 {
@@ -63,6 +64,7 @@ namespace _6.Task_12
 
                 if (userInput <= _aviarys.Count & userInput > 0)
                 {
+                    Console.WriteLine($"Into №{userInput} aviary you see:");
                     ShowInfo(userInput - 1);
                 }
                 else
@@ -76,21 +78,11 @@ namespace _6.Task_12
     class Aviary
     {
         private List<Animal> _animals = new List<Animal>();
-        private List<Animal> _animalsList = new List<Animal>()
-        {
-            new Animal("Bear", "Rooar"),
-            new Animal("Dog", "Barking"),
-            new Animal("Wolf", "Howl"),
-            new Animal("Cow", "Moo"),
-        };
-
         private int _minCapacity = 2;
         private int _maxCapacity = 6;
-        private int _id;
 
         public Aviary()
         {
-            _id = UserUtils.CreateID();
             FillTheAnimals(UserUtils.GenerateRandomIntNumber(_minCapacity, _maxCapacity));
         }
 
@@ -98,6 +90,14 @@ namespace _6.Task_12
 
         public void FillTheAnimals(int numberOfAnimals)
         {
+            List<Animal> _animalsList = new List<Animal>()
+            {
+            new Animal("Bear", "Rooar"),
+            new Animal("Dog", "Barking"),
+            new Animal("Wolf", "Howl"),
+            new Animal("Cow", "Moo"),
+            };
+
             for (int i = 0; i < numberOfAnimals; i++)
             {
                 Animal tempAnimal;
@@ -109,8 +109,6 @@ namespace _6.Task_12
 
         public void ShowInfo()
         {
-            Console.WriteLine($"Into this aviary №{_id}:");
-
             foreach (var animal in _animals)
             {
                 Console.WriteLine($"{animal.Name}, voice: {animal.Voice}. Gender - {animal.Gender}");
@@ -120,9 +118,6 @@ namespace _6.Task_12
 
     class Animal
     {
-        private int _genredMale = 2;
-        private int _genderFemale = 0;
-
         public Animal(string name, string voice)
         {
             Name = name;
@@ -135,14 +130,13 @@ namespace _6.Task_12
 
         public void DefineGender()
         {
-            if (UserUtils.GenerateRandomIntNumber(_genderFemale, _genredMale) > 0)
-            {
-                Gender = "male";
-            }
-            else
-            {
-                Gender = "female";
-            }
+            List<string> gender = new List<string> 
+            { 
+                "Male", 
+                "female" 
+            };
+
+            Gender = gender[UserUtils.GenerateRandomIntNumber(0,gender.Count)];
         }
 
         public Animal CLone()
@@ -159,11 +153,6 @@ namespace _6.Task_12
         public static int GenerateRandomIntNumber(int min, int max)
         {
             return s_random.Next(min, max);
-        }
-
-        public static int CreateID()
-        {
-            return s_id++;
         }
     }
 }
