@@ -111,44 +111,47 @@ namespace _6.Task_12
         {
             foreach (var animal in _animals)
             {
-                Console.WriteLine($"{animal.Name}, voice: {animal.Voice}. Gender - {animal.Gender}");
+                animal.ShowInfo(animal);
             }
         }
     }
 
     class Animal
     {
+        private string _gender;
+        private string _name;
+        private string _voice;
         public Animal(string name, string voice)
         {
-            Name = name;
-            Voice = voice;
-        }
-
-        public string Gender { get; private set; }
-        public string Name { get; private set; }
-        public string Voice { get; private set; }
+            _name = name;
+            _voice = voice;
+        }       
 
         public void DefineGender()
         {
             List<string> gender = new List<string> 
             { 
                 "Male", 
-                "female" 
+                "Female" 
             };
 
-            Gender = gender[UserUtils.GenerateRandomIntNumber(0,gender.Count)];
+            _gender = gender[UserUtils.GenerateRandomIntNumber(0,gender.Count)];
         }
 
         public Animal CLone()
         {
-            return new Animal(Name, Voice);
+            return new Animal(_name, _voice);
+        }
+
+        public void ShowInfo(Animal animal)
+        {
+            Console.WriteLine($"{animal._name}, voice: {animal._voice}. Gender - {animal._gender}");
         }
     }
 
     class UserUtils
     {
-        private static Random s_random = new Random();
-        public static int s_id { get; private set; } = 1;
+        private static Random s_random = new Random();        
 
         public static int GenerateRandomIntNumber(int min, int max)
         {
