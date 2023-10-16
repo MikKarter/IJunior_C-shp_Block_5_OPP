@@ -25,7 +25,7 @@ namespace _6.Task_12
             CalculateAviaryQuantity();
         }
 
-        private void ShowInfo()
+        private void ShowAviarysQuantity()
         {
             Console.WriteLine($"In Zoo your see {_aviarys.Count} aviarys");
         }
@@ -58,7 +58,7 @@ namespace _6.Task_12
 
             while (isOpen)
             {
-                ShowInfo();
+                ShowAviarysQuantity();
                 Console.WriteLine("Please, select to number aviary to get closer");
                 int.TryParse(Console.ReadLine(), out int userInput);
 
@@ -83,12 +83,12 @@ namespace _6.Task_12
 
         public Aviary()
         {
-            FillTheAnimals(UserUtils.GenerateRandomIntNumber(_minCapacity, _maxCapacity));
+            FillAnimals(UserUtils.GenerateRandomIntNumber(_minCapacity, _maxCapacity));
         }
 
         public int Number { get; private set; }
 
-        public void FillTheAnimals(int numberOfAnimals)
+        public void FillAnimals(int numberOfAnimals)
         {
             List<Animal> _animalsList = new List<Animal>()
             {
