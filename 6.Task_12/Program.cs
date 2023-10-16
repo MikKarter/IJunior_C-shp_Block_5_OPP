@@ -25,17 +25,17 @@ namespace _6.Task_12
             CalculateAviaryQuantity();
         }
 
-        public void ShowInfo()
+        private void ShowInfo()
         {
             Console.WriteLine($"In Zoo your see {_aviarys.Count} aviarys");
         }
 
-        public void ShowInfo(int index)
+        private void ShowInfo(int index)
         {
             _aviarys[index].ShowInfo();
         }
 
-        public void CalculateAviaryQuantity()
+        private void CalculateAviaryQuantity()
         {
             _aviaryCount = UserUtils.GenerateRandomIntNumber(_minAviaryCount, _maxAviaryCount);
         }
