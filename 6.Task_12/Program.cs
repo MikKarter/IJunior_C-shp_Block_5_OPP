@@ -9,47 +9,28 @@ namespace _6.Task_12
         static void Main(string[] args)
         {
             Zoo zoo = new Zoo();
-            zoo.ManageZoo();
+            zoo.Manage();
         }
     }
 
     class Zoo
     {
-        private int _minAviaryCount = 4;
-        private int _maxAviaryCount = 10;
+
         private List<Aviary> _aviarys = new List<Aviary>();
         private int _aviaryCount = 0;
 
         public Zoo()
         {
-            CalculateAviaryQuantity();
+            int _minAviaryCount = 4;
+            int _maxAviaryCount = 10;
+            _aviaryCount = UserUtils.GenerateRandomIntNumber(_minAviaryCount, _maxAviaryCount);            
         }
 
-        private void ShowAviarysQuantity()
+        public void Manage()
         {
-            Console.WriteLine($"In Zoo your see {_aviarys.Count} aviarys");
-        }
+            bool isOpen = true;            
 
-        private void ShowInfo(int index)
-        {
-            _aviarys[index].ShowInfo();
-        }
-
-        private void CalculateAviaryQuantity()
-        {
-            _aviaryCount = UserUtils.GenerateRandomIntNumber(_minAviaryCount, _maxAviaryCount);
-        }
-
-        public void ManageZoo()
-        {
-            bool isOpen = true;
-
-            for (int i = 0; i < _minAviaryCount; i++)
-            {
-                _aviarys.Add(new Aviary());
-            }
-
-            for (int i = _minAviaryCount; i < _aviaryCount; i++)
+            for (int i = 0; i < _aviaryCount; i++)
             {
                 _aviarys.Add(new Aviary());
             }
@@ -65,13 +46,23 @@ namespace _6.Task_12
                 if (userInput <= _aviarys.Count & userInput > 0)
                 {
                     Console.WriteLine($"Into №{userInput} aviary you see:");
-                    ShowInfo(userInput - 1);
+                    ShowAnimalInfo(userInput - 1);
                 }
                 else
                 {
                     Console.WriteLine("Error! Please select correct number");
                 }
             }
+        }
+
+        private void ShowAviarysQuantity()
+        {
+            Console.WriteLine($"In Zoo your see {_aviarys.Count} aviarys");
+        }
+
+        private void ShowAnimalInfo(int index)
+        {
+            _aviarys[index].ShowInfo();
         }
     }
 
@@ -98,9 +89,11 @@ namespace _6.Task_12
             new Animal("Cow", "Moo"),
             };
 
+            int randomIndexAnimal = UserUtils.GenerateRandomIntNumber(0, _animalsList.Count);
+
             for (int i = 0; i < numberOfAnimals; i++)
             {
-                Animal tempAnimal = _animalsList[UserUtils.GenerateRandomIntNumber(0, _animalsList.Count)].CLone();                
+                Animal tempAnimal = _animalsList[randomIndexAnimal].CLone();
                 _animals.Add(tempAnimal);
             }
         }
@@ -125,17 +118,17 @@ namespace _6.Task_12
             _name = name;
             _voice = voice;
             DefineGender();
-        }       
+        }
 
         public void DefineGender()
         {
-            List<string> gender = new List<string> 
-            { 
-                "Male", 
-                "Female" 
+            List<string> gender = new List<string>
+            {
+                "Male",
+                "Female"
             };
 
-            _gender = gender[UserUtils.GenerateRandomIntNumber(0,gender.Count)];
+            _gender = gender[UserUtils.GenerateRandomIntNumber(0, gender.Count)];
         }
 
         public Animal CLone()
@@ -151,7 +144,7 @@ namespace _6.Task_12
 
     class UserUtils
     {
-        private static Random s_random = new Random();        
+        private static Random s_random = new Random();
 
         public static int GenerateRandomIntNumber(int min, int max)
         {
