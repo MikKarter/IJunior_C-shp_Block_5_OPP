@@ -100,9 +100,7 @@ namespace _6.Task_12
 
             for (int i = 0; i < numberOfAnimals; i++)
             {
-                Animal tempAnimal;
-                tempAnimal = _animalsList[UserUtils.GenerateRandomIntNumber(0, _animalsList.Count)].CLone();
-                tempAnimal.DefineGender();
+                Animal tempAnimal = _animalsList[UserUtils.GenerateRandomIntNumber(0, _animalsList.Count)].CLone();                
                 _animals.Add(tempAnimal);
             }
         }
@@ -121,10 +119,12 @@ namespace _6.Task_12
         private string _gender;
         private string _name;
         private string _voice;
+
         public Animal(string name, string voice)
         {
             _name = name;
             _voice = voice;
+            DefineGender();
         }       
 
         public void DefineGender()
