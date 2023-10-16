@@ -9,7 +9,6 @@ namespace _6.Task_12
         {
             Zoo zoo = new Zoo();
             zoo.ManageZoo();
-
         }
     }
 
