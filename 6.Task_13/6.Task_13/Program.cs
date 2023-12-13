@@ -288,21 +288,9 @@ namespace _6.Task_13
 
             foreach (var detail in _details)
             {
-                if (detail is Engine && detail.IsBroken)
+                if (detail.IsBroken)
                 {
-                    Console.WriteLine(BreakingsDescription.EngineBreaks);
-                }
-                else if (detail is Brakes && detail.IsBroken)
-                {
-                    Console.WriteLine(BreakingsDescription.BrakesBreaks);
-                }
-                else if (detail is Rudder && detail.IsBroken)
-                {
-                    Console.WriteLine(BreakingsDescription.RudderBreaks);
-                }
-                else if (detail is Suspension && detail.IsBroken)
-                {
-                    Console.WriteLine(BreakingsDescription.SuspensionBreaks);
+                    Console.WriteLine(detail.ReasonBrekadown);
                 }
             }
         }
@@ -357,6 +345,7 @@ namespace _6.Task_13
         public int SelfPrice { get; protected set; }
         public int WorkPrice { get; protected set; }
         public bool IsBroken { get; protected set; } = false;
+        public string ReasonBrekadown { get; protected set; }
         public int TotalPrice => SelfPrice + WorkPrice;
 
         public abstract Detail Clone();
@@ -379,6 +368,7 @@ namespace _6.Task_13
             Name = "Двигатель";
             SelfPrice = 5000;
             WorkPrice = 3500;
+            ReasonBrekadown = "Машина не заводится";
         }
 
         public override Detail Clone()
@@ -394,6 +384,7 @@ namespace _6.Task_13
             Name = "Тормоза";
             SelfPrice = 3000;
             WorkPrice = 2000;
+            ReasonBrekadown = "Машину заносит на поворотах";
         }
 
         public override Detail Clone()
@@ -409,6 +400,7 @@ namespace _6.Task_13
             Name = "Руль";
             SelfPrice = 2000;
             WorkPrice = 1000;
+            ReasonBrekadown = "Машина не поворачивает";
         }
 
         public override Detail Clone()
@@ -424,6 +416,7 @@ namespace _6.Task_13
             Name = "Подвеска";
             SelfPrice = 4000;
             WorkPrice = 2500;
+            ReasonBrekadown = "При езде слышны стуки снизу";
         }
 
         public override Detail Clone()
@@ -454,13 +447,5 @@ namespace _6.Task_13
         {
             return s_random.Next(min, max);
         }
-    }
-
-    public class BreakingsDescription
-    {
-        public const string EngineBreaks = "Машина не заводится";
-        public const string BrakesBreaks = "Машину заносит на поворотах";
-        public const string RudderBreaks = "Машина не поворачивает";
-        public const string SuspensionBreaks = "При езде слышны стуки снизу";
     }
 }
