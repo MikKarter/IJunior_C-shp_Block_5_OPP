@@ -47,8 +47,6 @@ namespace _6.Task_13
 
     class CarService
     {
-        private List<Detail> _details;
-
         private Queue<Car> _cars;
 
         private Stock _stock;
@@ -57,8 +55,6 @@ namespace _6.Task_13
 
         public CarService(List<Detail> details, Queue<Car> cars)
         {
-            _details = details;
-
             _cars = cars;
 
             _stock = new Stock(details);
@@ -66,7 +62,7 @@ namespace _6.Task_13
 
         public void Work()
         {
-            while (_cars.Count > 0)
+            while (_cars.Count > 0 && _money > 0)
             {
                 _stock.ShowInfo();
                 ShowMoney();
@@ -90,7 +86,7 @@ namespace _6.Task_13
                 car.ReportBreaking();
             }
 
-            if (TryChooseDetail(brokenDetail, out selectedDetail) && _stock.HaveDetail(selectedDetail))
+            if (TryChooseDetail(brokenDetail, out selectedDetail))
             {
                 ShowTotalPrice(selectedDetail);
 
@@ -101,7 +97,7 @@ namespace _6.Task_13
                 if (car.HasBrokenDetails() == false)
                 {
                     Console.WriteLine("Починка прошла успешно!");
-                    GetMoney(selectedDetail);
+                    AddMoney(selectedDetail);
                 }
                 else
                 {
@@ -111,7 +107,7 @@ namespace _6.Task_13
             }
         }
 
-        private void GetMoney(Detail detail)
+        private void AddMoney(Detail detail)
         {
             _money += detail.TotalPrice;
         }
@@ -142,15 +138,7 @@ namespace _6.Task_13
             {
                 if (brokenDetail.Name == detail.Name)
                 {
-                    if (_stock.HaveDetail(detail))
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        Console.WriteLine("На складе нет нужной детали. Плати компенсацию.");
-                        PayCompensation();
-                    }
+                    return true;
                 }
                 else
                 {
@@ -161,6 +149,8 @@ namespace _6.Task_13
             else
             {
                 Console.WriteLine("Такой детали нет на складе.");
+                Console.WriteLine("На складе нет нужной детали. Плати компенсацию.");
+                PayCompensation();
             }
 
             return false;
@@ -188,7 +178,7 @@ namespace _6.Task_13
 
     class Stock
     {
-        private Dictionary<Detail, int> _boxes;
+        private List<Slot> _boxes;
 
         public Stock(List<Detail> details)
         {
@@ -197,20 +187,11 @@ namespace _6.Task_13
 
         public void SpendDetail(Detail detail)
         {
-            if (_boxes[detail] > 0)
+            foreach (var slot in _boxes)
             {
-                _boxes[detail]--;
+                if (slot.Detail.Name == detail.Name)
+                    slot.Remove();
             }
-        }
-
-        public bool HaveDetail(Detail detail)
-        {
-            if (_boxes[detail] > 0)
-            {
-                return true;
-            }
-
-            return false;
         }
 
         public void ShowInfo()
@@ -222,14 +203,14 @@ namespace _6.Task_13
             Console.SetCursorPosition(positionX, positionY);
             Console.WriteLine("Склад деталей:");
 
-            foreach (var box in _boxes)
+            foreach (var slot in _boxes)
             {
                 positionY++;
                 number++;
 
                 Console.SetCursorPosition(positionX, positionY);
 
-                Console.WriteLine($"{number}) Деталь: {box.Key.Name}. Осталось {box.Value} шт.");
+                Console.WriteLine($"{number}) Деталь: {slot.Detail.Name}. Осталось {slot.Count} шт.");
             }
         }
 
@@ -237,32 +218,62 @@ namespace _6.Task_13
         {
             detail = null;
 
-            foreach (var box in _boxes)
+            foreach (var slot in _boxes)
             {
-                if (box.Key.Name.ToLower() == detailName.ToLower())
+                if (slot.Detail.Name.ToLower() == detailName.ToLower())
                 {
-                    detail = box.Key;
-
-                    return true;
+                    if (slot.HasDetails)
+                    {
+                        detail = slot.Detail;
+                        return true;
+                    }
                 }
             }
 
             return false;
         }
 
-        private Dictionary<Detail, int> Fill(List<Detail> details)
+        private List<Slot> Fill(List<Detail> details)
         {
-            Dictionary<Detail, int> boxes = new Dictionary<Detail, int>();
+            List<Slot> boxes = new List<Slot>();
 
             int randomMinValue = 1;
             int randomMaxValue = 6;
 
             for (int i = 0; i < details.Count; i++)
             {
-                boxes.Add(details[i], UserUtils.GetRandomNumber(randomMinValue, randomMaxValue));
+                boxes.Add(new Slot(details[i], UserUtils.GetRandomNumber(randomMinValue, randomMaxValue)));
             }
 
             return boxes;
+        }
+    }
+
+    class Slot
+    {
+        public Slot(Detail detail, int count)
+        {
+            Detail = detail;
+            Count = count;
+        }
+
+        public Detail Detail { get; }
+        public int Count { get; private set; }
+        
+        public bool HasDetails => Count > 0;
+
+        public void Add(int amount = 1)
+        {
+            Count += amount;
+        }
+
+        public void Remove(int amount = 1)
+        {
+            if (Count >= Count - amount)
+                Count -= amount;
+
+            if (HasDetails == false)
+                Console.WriteLine($"Детали {Detail.Name} кончились");
         }
     }
 
